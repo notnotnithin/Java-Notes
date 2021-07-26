@@ -1,0 +1,16 @@
+--------------------------------------------------------------------------------------------------------
+StringBuffer class:
+We need to use StringBuffer only when content keep on changing because for every change the same object will be updated instead of creating a new object.
+--------------------------------------------------------------------------------------------------------
+StringBuffer constructors:
+1. StringBuffer sb = new StringBuffer();
+creates an empty StringBuffer with a default initial capacity of 16. If 16 characters are full, then internally a new StringBuffer object will be created with bigger capacity and 16 characters will be copied and the reference will be pointing to the new object. 
+
+The new capacity of the StringBuffer will be: (current capacity + 1) * 2 = (16 + 1) * 2 = 34
+
+2. StringBuffer sb = new StringBuffer(int initialCapacity);
+if you know the capacity beforehand then we can use this constructor to create a StringBuffer with an initial capacity. If the initial capacity is filled then the same formula is used to create a new StringBuffer object with extra memory.
+
+3. StringBuffer sb = new StringBuffer(String s);
+for a given string we can create an equivalent StringBuffer object with a capacity equal to s.length + 16.
+--------------------------------------------------------------------------------------------------------
