@@ -1,0 +1,107 @@
+Method reference and Constructor reference using :: operator:
+Consider the below example using a static method.
+
+````
+interface PracticeInterface {
+  void m1();
+}
+
+public class Practice {
+  public static void m2() {
+    System.out.println("Method Reference");
+  }
+
+  public static void main(String[] args) {
+    PracticeInterface pi = Practice::m2;
+    pi.m1();
+  }
+}
+````
+
+In the above code snippet, using a lambda expression the m1() abstract method will be given a new implementation. However, using method reference, the functional interface m1() method will internally refer to m2() method that is already present in the class. Biggest advantage of method reference is code reusability. One thing to keep in mind is if we want to use method reference, then both referrer and reffering methods must have same argument type. It doesn't matter if they have different method names, different modifiers, or return types. It even doesn't matter if the method is static or non-static.
+
+Syntax for method reference in case of a static method:
+-> Classname :: method_name
+
+Consider the below example using an instance method.
+a. Creating a thread using old Java style.
+
+````
+Runnable myRunnable = new Runnable();
+Thread t = new Thread(myRunnable);
+t.start();
+````
+
+b. Creating a thread using a lambda expression.
+
+````
+Runnable myRunnable = () -> {
+  for(int i=0; i<10; i++) {
+    System.out.println("child thread");
+  }
+};
+Thread t = new Thread(myRunnable);
+t.start();
+````
+
+c. Creating a thread using method reference.
+
+````
+public class Test {
+  public void m1() {
+    for(int i=0; i<10; i++) {
+      System.out.println("child thread");
+    }
+  }
+
+  public static void main(String[] args) {
+    Test t = new Test();
+    Runnable r = t::m1();
+    Thread t = new Thread(r)
+    t.start();
+  }
+}
+````
+
+Syntax for method reference in case of an instance method:
+-> object_reference :: method_name
+Ex: 
+Test t = new Test();
+t::m2;
+
+Constructor reference using :: operator:
+Using a lambda expression, we can do constructor reference as shown below
+
+````
+public class Sample {
+  public Sample() {
+    System.out.println("Sample constructor execution and object creation");
+  }
+}
+
+interface SampleInterface {
+  public Sample get();
+}
+
+class Test {
+  public static void main(String[] args) {
+    SampleInterface si = () -> {
+      Sample s = new Sample();
+      return s;
+    }
+
+    si.get();
+  }
+}
+````
+
+Now, using constructor reference.
+Here, the get() method internally refers to Sample class no argument constructor.
+````
+class Test {
+  public static void main(String[] args) {
+    SampleInterface si = Sample::new;
+    Sample s = si.get();
+  }
+}
+````

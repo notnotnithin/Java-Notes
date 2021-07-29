@@ -1,0 +1,79 @@
+Default methods inside interfaces:
+1. Until Java 1.7, we were only able to have public and abstract methods and all variables were public static final.
+2. In Java 1.8, we are allowed to have concrete methods inside interfaces and they are called as default methods.
+
+````
+interface DefaultInterface {
+  default void m1() {
+    System.out.println("Default method");
+  }
+}
+````
+
+3. The implementation class can either use this default method or it can even override it.
+
+Default method with multiple inheritance:
+If two interfaces containing same default methods are implemented by the same class, then there will be an ambiguity issue. This can be overome by overriding the default method in the implementing class. 
+
+If in any case, you do not want to implement the method in the implementation class, then you can explicitly specify which ever method you want to use.
+
+````
+interface Left {
+  default void m1() {
+    System.out.println("Left method");
+  }
+}
+
+interface Right {
+  default void m1() {
+    System.out.println("Right method");
+  }
+}
+
+class Test implements Left, Right {
+  public void m1() {
+    Left.super.m1();
+  }
+}
+````
+In the above code, we have overridden the m1() method. While overriding we can choose either to provide our own implementation or we can call the parent interface's methods using Left.super.m1() or Right.super.m1().
+
+Differences between an interface with default methods and abstract classes:
+Interface with default methods:
+1. Inside an interface every variable is public, static and final by default. We can never declare an instance variable.
+2. Interfaces never talk about the state of an object.
+3. Inside an interface we cannot declare constants.
+4. Inside an interface we cannot declare both instance and static blocks.
+5. Functional interfaces with default methods can be used to provide implementation to lambda expressions.
+6. Inside an interface we cannot override object class methods.
+
+Abstract classes:
+1. Inside an abstract class we can declare instance variables required by the child classes.
+2. Abstract class could potentially talk about the state of an object.
+3. Inside an interface we can declare constants.
+4. Inside an interface we can declare both instance and static blocks.
+5. Abstract classes can never be used to provide implementation to lambda expressions.
+6. Inside an abstract class we can override object class methods.
+
+Static methods inside interfaces:
+1. From Java 1.8 version onwards we can declare general utility methods that are no way related to object state in the form of static methods.
+2. This method can be used not only by the implementation class but also by any other class which do not implement the interface.
+3. By default, the interface static methods are not available for the implementation classes. Hence we will not be able to call the static method using implementation object reference or by using implementation class name.
+4. If in case, the implementation class wants to use the static method, then we need to invoke the method explicitly only by using the interface name.
+
+````
+interface StaticMethodInterface {
+  public static void m1() {
+    System.out.println("Interface static method");
+  }
+}
+
+public class Test implements StaticMethodInterface {
+  public static void main(String[] args) {
+    Test t = new Test();
+    t.m1(); // compilation error
+    Test.m1(); // compilation error
+    StaticMethodInterface.m1(); // works fine.
+  }
+}
+````

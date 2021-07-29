@@ -1,0 +1,31 @@
+Java creators wanted to introduce the functional features such as:
+a. Lambdas
+b. Streams
+c. Optional etc.
+
+Since there are so much of technological advancements happening around the world and in order to make use of multiple processors developers came up with these concepts to access all the processors that we get these days in mobile/laptops. With Java 8, we are going to write functional programming code using the new functional concepts which simplifies the concurrency operations.
+
+Lambdas - Lambda is equivalent to a function (method) without a name. 
+
+Lambda's are also referred as Anonymous functions.
+1. Method Parameters
+2. Method Body
+3. Return Type
+
+Lambda's are not tied to any class like a regular method.
+Lambda's can also be assigned to a variable and passed around.
+
+Usages of a lambda expression:
+Lambda is mainly used to implement a Functional Interface or Single Abstract Method (SAM) interfaces.
+Examples:
+@FunctionalInterface
+public interface Comparator<T> {
+      int compare(T o1, T o2);
+}
+
+@FunctionalInterface
+public interface Runnable {
+      public abstract void run();
+}
+
+Lambda embraces code reusability.
