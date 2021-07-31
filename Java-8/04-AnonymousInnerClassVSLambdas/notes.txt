@@ -98,7 +98,7 @@ TestInterfaceMultipleMethods t = new TestInterfaceMultipleMethods() {
 }
 ````
 
-However, we cannot replace all the above anonymous inner class with a lambda expression except an interface containing a single abstract method.
+However, we cannot replace all the above anonymous inner classes with a lambda expressions except an interface containing a single abstract method.
 
 Anonymous Inner Class and Lambda Expression with respect to `this` keyword:
 1. Inside an anonymous inner class we can declare instance variables.
