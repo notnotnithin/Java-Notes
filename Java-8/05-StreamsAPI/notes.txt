@@ -1,0 +1,135 @@
+Introduction to Streams API:
+a. Main purpose is to perform some Operations on Collections.
+b. Parallel operations are easy to perform with Streams API without having to spawn a multiple threads.
+c. Streams API can be also used with arrays or any kind of I/O.
+
+What is a Stream?
+Stream is a sequence of elements which can be created out of a collections such as List or Arrays or any kind of I/O resources etc.
+Ex:
+List<String> names = Arrays.asList(“adam”, “ben”, “jenny”);
+names.stream(); // creates a stream
+
+Stream operations can be performed either sequentially or parallel.
+names.parallelStream(); // creates a parallel stream
+
+How Stream API works?
+All stream operations together form a pipeline called the Stream Pipeline. The stream operations that happen between the stream() method and the terminal operation is called as Intermediate Operations. We can have n number of operations. The terminal operation called collect() is the one which converts the input to our final desired output that we are looking for. collect() method is the one which starts the complete process or the pipeline.
+
+````
+Predicate<Student> studentPredicate = student -> student.getGradeLevel() >= 3;
+Predicate<Student> studentGPAPredicate = student -> student.getGpa() >= 3.9;
+
+Map<String, List<String>> mapStudents = StudentDatabase.getAllStudents()
+  .stream()
+  .filter(studentPredicate)
+  .filter(studentGPAPredicate)
+  .collect(Collectors.toMap(Student::getName, Student::getActivities));
+System.out.println(mapStudents);
+````
+
+Collections:
+1. Collections can add or modify elements at any point of time.
+2. Elements in the collection can be accessed in any order. Use appropriate methods based on the collection.
+3. Collections are eagerly constructed. Means we must populate the collection with the values to manipulate it.
+4. Collections can be traversed "n" number of times.
+5. Performs external iteration to iterate through the elements.
+
+Streams:
+1. Streams cannot add or modify elements. It is a fixed data set.
+2. Elements in the stream can be accessed only in sequence.
+3. Streams are lazily constructed. Means until and unless a terminal operation is invoked the stream doesn't start its process at all.
+4. Streams can be traversed only once.
+5. Performs internal iteration to iterate through the elements.
+
+Operations: 
+Stream API: map():
+1. Used to change from one type to another.
+2. Map accepts a Function functional interface to convert from Student type to String type in this example.
+
+````
+public static List<String> getNamesList() {
+  return StudentDatabase.getAllStudents().stream()
+    .map(Student::getName)
+    .collect(Collectors.toList());
+}
+````
+
+Stream API: flatMap():
+1. Converts (transforms) one type to another just like the map() method.
+2. Used in the context of Stream where each element in the stream represents multiple elements like an array or any type of collection.
+Ex:
+Each Stream element represents multiple elements.
+Stream<List>
+Stream<Arrays>
+
+````
+public static List<String> getStudentActivities() {
+  return StudentDatabase.getAllStudents()
+    .stream()
+    .map(Student::getActivities)
+    .flatMap(List::stream)
+    .collect(Collectors.toList());
+}
+````
+
+Stream API: distinct(), count(), and sorted():
+1. distinct: Returns a stream with unique elements.
+2. count: Returns a long with the total no. of elements in the stream.
+3. sorted: Sort the elements in the stream.
+
+Ex for distinct() method:
+````
+public static List<String> getStudentActivities() {
+  return StudentDatabase.getAllStudents()
+    .stream()
+    .map(Student::getActivities)
+    .flatMap(List::stream)
+    .distinct() // removes duplicates
+    .collect(Collectors.toList());
+}
+````
+
+Ex for count() method:
+````
+public static long getStudentActivitiesCount() {
+  return StudentDatabase.getAllStudents()
+    .stream()
+    .map(Student::getActivities)
+    .flatMap(List::stream)
+    .distinct()
+    .count();
+}
+````
+
+Ex for sorted() method:
+````
+public static List<Student> sortStudentsByName() {
+  return StudentDatabase.getAllStudents()
+    .stream()
+    .sorted()
+    .collect(Collectors.toList());
+}
+
+// Customized sort using Comparator
+public static List<Student> sortStudentsByName() {
+  return StudentDatabase.getAllStudents()
+    .stream()
+    .sorted(Comparator.comparing(Student::getName))
+    .collect(Collectors.toList());
+}
+
+public static List<Student> sortStudentsByGPA() {
+  return StudentDatabase.getAllStudents()
+    .stream()
+    .sorted(Comparator.comparing(Student::getGpa))
+    .collect(Collectors.toList());
+}
+
+// prints the sorted results in reverse order.
+public static List<Student> sortStudentsByGPADesc() {
+  return StudentDatabase.getAllStudents()
+    .stream()
+    .sorted(Comparator.comparing(Student::getGpa).reversed())
+    .collect(Collectors.toList());
+}
+````
