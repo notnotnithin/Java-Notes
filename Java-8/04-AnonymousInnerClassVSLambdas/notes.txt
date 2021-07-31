@@ -1,0 +1,149 @@
+Anonymous Inner Class versus Lambda Expression:
+Where ever we find an anonymous inner class there might be a possibility to replace it with the lambda expression but not always.
+
+Anonymous Inner Class:
+Consider the following example,
+
+````
+Runnable r = new Runnable() {
+  @Override
+  public void run() {
+    System.out.println("Hello");
+  }
+};
+Thread t = new Thread(r);
+t.start();
+````
+
+This "new Runnable()" object is an object of its implementation class for which, we are writing a class that implements "Runnable" interface. For this implementation class, we are creating an object with Runnable reference. The implementation class has no name and such a class is known as Anonymous Inner Class.
+
+Lambda Expression:
+
+````
+Runnable r = () -> {
+  System.out.println("Hello");
+};
+Thread t = new Thread(r);
+t.start();
+````
+
+Only some of the Anonymous Inner Classes can be replaced with a Lambda Expressions because Anonymous Inner Classes are different compared to Lambda Expressions. Anonymous Inner Classes are more powerful than Lambda Expressions.
+
+Examples to explain why all Anonymous Inner Classes cannot be replaced by a lambda expression:
+1. using anonymous inner class, we can extend a concrete class.
+````
+class TestConcrete {
+  void meth1() {}
+}
+
+TestConcrete t = new TestConcrete() {
+  @Override
+  public void meth1() {
+
+  }
+}
+````
+
+2. using anonymous inner class, we can extend an abstract class.
+````
+abstract class TestAbstract {
+  void meth1() {}
+}
+
+TestAbstract t = new TestAbstract() {
+  @Override
+  public void meth1() {
+    
+  }
+}
+````
+
+3. using anonymous inner class, we can implement an interface containing a single astract method.
+````
+interface TestInterfaceSingleMethod {
+  void singleMeth();
+}
+
+TestInterfaceSingleMethod t = new TestInterfaceSingleMethod() {
+  @Override
+  public void singleMeth() {
+    
+  }
+}
+````
+
+4. using anonymous inner class, we can implement an interface containing a multiple astract methods.
+````
+interface TestInterfaceMultipleMethods {
+  void methOne();
+  void methTwo();
+  void methThree();
+}
+
+TestInterfaceMultipleMethods t = new TestInterfaceMultipleMethods() {
+  @Override
+  public void methOne() {
+    
+  }
+
+  @Override
+  public void methTwo() {
+    
+  }
+
+  @Override
+  public void methThree() {
+    
+  }
+}
+````
+
+However, we cannot replace all the above anonymous inner class with a lambda expression except an interface containing a single abstract method.
+
+Anonymous Inner Class and Lambda Expression with respect to `this` keyword:
+1. Inside an anonymous inner class we can declare instance variables.
+2. The `this` keyword inside the anonymous inner class always refers to the current inner class object only. However, to access the outer class instance variable we can use "Test.this.x" in our example.
+
+````
+class Test {
+  int x = 888;
+
+  public static void meth() {
+    TestInterfaceSingleMethod t =
+        new TestInterfaceSingleMethod() {
+          int x = 999;
+
+          @Override
+          public void singleMeth() {
+            System.out.println(this.x);
+          }
+        };
+    t.singleMeth();
+  }
+
+  public static void main(String[] args) {
+    meth(); // OUTPUT: 999
+  }
+}
+````
+3. Inside a lambda expression any variable declared acts as a local variable.
+4. The `this` keyword inside the lambda expression always refers to outer class object.
+
+````
+class Test {
+  int x = 888;
+
+  public void meth() {
+    TestInterfaceSingleMethod t = () -> {
+      int x = 999;
+      System.out.println(this.x);
+    };
+    t.singleMeth();
+  }
+
+  public static void main(String[] args) {
+    Practice p = new Practice();
+    p.meth(); // OUTPUT: 888
+  }
+}
+````
