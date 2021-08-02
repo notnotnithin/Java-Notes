@@ -133,3 +133,550 @@ public static List<Student> sortStudentsByGPADesc() {
     .collect(Collectors.toList());
 }
 ````
+
+Stream API: filter()
+1. filter filters the elements in the stream.
+2. Input to the filter is a Predicate Functional Interface.
+
+Streams API: reduce()
+1. reduce : This is a terminal operation. Used to reduce the contents of a stream to a single value.
+Use cases of the reduce() function.
+a. Find sum of all the elements in the stream
+b. Perform multiplication of all the elements in the stream
+c. Find out who is the highest-grade student out of the Student database.
+
+2. It takes two parameters as an input.
+a. First parameter - default or initial value
+b. Second parameter – BinaryOperator<T>
+
+````
+public static int performMultiplication(List<Integer> integerList) {
+  return integerList.stream()
+    .reduce(1, (a, b) -> a * b);
+}
+````
+Here, every element in the stream will be passed to the reduce function one after the other. In the first iteration, a will hold the default value passed, 1 in this case, and b will hold the value 1 from the stream. Multiplication operation will be performed and the result will be returned. 
+
+In the next iteration, a will hold the result from the previous iteration which is 1 and b will hold the value 3 from the stream. Multiplication operation will be performed and the result will be returned. This will continue until there any elements left in the stream.
+
+i.e., 
+a = 1, b = 1
+RESULT will be 1 (stored in a)
+
+a = 1, b = 3
+RESULT will be 3 (stored in a)
+
+a = 3, b = 5
+RESULT will be 15 (stored in a)
+
+a = 15 b = 7
+RESULT will be 105 (stored in a)
+
+The other variation of reduce() method is the one without the accumulator and it returns Optional<Integer>.
+
+````
+public static Optional<Integer> performMultiplicationWithoutIdentity(List<Integer> integerList) {
+  return integerList.stream()
+    .reduce((a, b) -> a * b);
+}
+````
+
+Optional, introduced as part of Java 8, will handle the null values gracefully. The Optional object provides us a boolean function isPresent() to check if the Optional object has some content. If the check is not in place it will throw a NoSuchElementException.
+
+````
+public static Optional<Student> getHighestGPAStudent() {
+  return StudentDatabase.getAllStudents()
+    .stream()
+    .reduce((s1, s2) -> s1.getGpa() > s2.getGpa() ? s1 : s2);
+}
+````
+
+Streams API: Map + Filter + Reduce Pattern:
+The usecase for the map reduce pattern can be to calculate the summation of notebooks that each student has.
+
+````
+public static int numberOfNotebooks() {
+  return StudentDatabase.getAllStudents().stream()
+      .filter(st -> st.getGradeLevel() >= 3)
+      .map(Student::getNoteBooks)
+      // .reduce(0, (n1, n2) -> n1 + n2);
+      .reduce(0, Integer::sum);
+}
+````
+
+Streams API: max() using reduce() function:
+To find the max element using the reduce function, we can use one of the implementation which takes in an identity and a BinaryOperator as parameters. 
+
+````
+public static int findMaxValue(List<Integer> intList) {
+  // return intList.stream().reduce(0, BinaryOperator.maxBy((a, b) -> a.compareTo(b)));
+  return intList.stream().reduce(0, (x, y) -> x > y ? x : y);
+}
+````
+As part of this reduce() function, x initially will be holding the default value passed in the reduce() function which is 0 in this case. Next, y will hold 6 from the stream and will be compared with the x value (0 > 6). Here, 6 is greater than 0 so 6 will be stored in the x, and y will get the next element in the stream, 7. This process will continue until there are no elements present in the stream.
+
+x = 0, y = 6
+0 > 6, RESULT 6 will be stored in x
+
+x = 6, y = 7
+6 > 7, RESULT 7 will be stored in x
+
+x = 7, y = 8
+7 > 8, RESULT 8 will be stored in x
+
+x = 8 y = 9
+8 > 9, RESULT 9 will be stored in x
+
+x = 9 y = 10
+9 > 10, RESULT 10 will be stored in x
+
+Finally, we return what x holds as the result, 10 as the answer.
+
+In case, we pass an empty list to the above method, we would not be getting an error. Instead, we would get 0 as the answer because we have set the default value. So we need to avoid setting a default value when we are performing a min and max value from a stream of integers. Using the implementation where Optional object is returned. In case of an empty list, we get back Optional.empty object from Optional.
+
+Streams API: limit() and skip()
+These two functions help to create a sub-stream.
+1. limit(n) : limits the "n" number of elements to be processed in the stream. Means it will only process the first "n" elements even though the stream contains more than "n" elements.
+
+````
+public static Optional<Integer> limit(List<Integer> integers) {
+  return integers.stream()
+    .limit(2)
+    .reduce(Integer::sum);
+}
+
+public static void main(String[] args) {
+  List<Integer> integers = Arrays.asList(6, 7, 8, 9, 10);
+  Optional<Integer> limitResult = limit(integers);
+  if (limitResult.isPresent()) {
+    System.out.println("The limit result is: " + limitResult.get());
+  } else {
+    System.out.println("No input passed!");
+  }
+}
+````
+
+2. skip(n) : skips the "n" number of elements from the stream. Means it will not process the first "n" elements and processes the remaining elements in the stream.
+
+````
+public static Optional<Integer> limit(List<Integer> integers) {
+  return integers.stream()
+    .skip(3)
+    .reduce(Integer::sum);
+}
+
+public static void main(String[] args) {
+  List<Integer> integers = Arrays.asList(6, 7, 8, 9, 10);
+  Optional<Integer> skipResult = limit(integers);
+  if (skipResult.isPresent()) {
+    System.out.println("The skip result is: " + skipResult.get());
+  } else {
+    System.out.println("No input passed!");
+  }
+}
+````
+
+Streams API: anyMatch(), allMatch() and noneMatch()
+All these functions takes in a predicate as an input and returns a Boolean as an output.
+1. anyMatch() - Returns true if any one of the element matches the predicate, otherwise false.
+
+2. allMatch() - Returns true if all the elements in the stream matches the predicate, otherwise false.
+
+3. noneMatch() - Just the opposite of allMatch(). Returns true if none of the elements in the stream matches the predicate, otherwise false.
+
+````
+public static boolean allMatch() {
+  return StudentDatabase.getAllStudents().stream()
+      .allMatch(student -> student.getGpa() >= 3.9);
+}
+
+public static boolean anyMatch() {
+  return StudentDatabase.getAllStudents().stream()
+      .anyMatch(student -> student.getGpa() >= 3.9);
+}
+
+public static boolean noneMatch() {
+  return StudentDatabase.getAllStudents().stream()
+      .noneMatch(student -> student.getGpa() >= 3.9);
+}
+````
+
+Streams API: findFirst() and findAny()
+Used to find an element in the stream.
+Both the functions returns the result of type Optional.
+
+1. findFirst() : Returns first element in the stream.
+
+````
+public static Optional<Student> findAnyStudent() {
+  return StudentDatabase.getAllStudents().stream()
+    // adam, jenny, emily (as soon as it found a student with the filter criteria it returned
+    // that student and it did not execute any of the student present after it matched the
+    // criteria)
+    .filter(student -> student.getGpa() >= 3.9)
+    .findAny();
+}
+````
+
+2. findAny() : Returns the first encountered element in the stream.
+
+````
+public static Optional<Student> findFirstStudent() {
+  return StudentDatabase.getAllStudents().stream()
+      .filter(student -> student.getGpa() >= 3.9)
+      .findFirst();
+}
+````
+
+Here, both functions return the same thing, but when you run the same stream in a parallel context, findFirst() is going to return the first element it encountered in one of the stream in parallel. That’s where the key difference is going to be.
+
+Streams API: of(), generate() and iterate()
+1. of() - creates a stream of certain values passed to this method.
+Ex: 
+````
+Stream<String> family = Stream.of("akhila", "nithin", "ariana", "adelina");
+family.forEach(System.out::println);
+````
+
+The below 2 methods are used to create infinite streams.
+2. iterate()
+Ex: Here, the first argument is the initial value and the second argument is the logic to apply on the initial value.
+````
+Stream.iterate(1, x -> x * 2)
+  .limit(10)
+  .forEach(System.out::println);
+````
+
+3. generate()
+Ex:
+Stream.generate(<Supplier>);
+
+This below code will generate a set of 10 random integers.
+````
+Supplier<Integer> integerSupplier = new Random()::nextInt;
+Stream<Integer> intGenerator = Stream.generate(integerSupplier);
+intGenerator.limit(10).forEach(System.out::println);
+````
+
+Streams API - Numeric Stream
+Numeric Streams are used to represent a primitive value in a stream.
+Ex:
+IntStream
+LongStream
+DoubleStream
+
+Advantages of a numeric stream over a regular stream:
+The use case to perform here is sum of N numbers.
+
+````
+public static int sumOfNNumbers(List<Integer> integerList) {
+  return integerList.stream()
+    .reduce(0, (x, y ) -> x + y);
+}
+````
+
+However, there is a problem with this code. Here, Integer is a wrapper class for the int primitive type. Behind the scenes, unboxing is performed to convert from the wrapper type Integer to primitive type int which is a wasted effort everytime an integer is passed in the stream. To avoid this we can use the numeric streams.
+
+````
+public static int sumOfNNumbersIntStream() {
+  return IntStream.rangeClosed(1, 6).sum();
+}
+````
+
+Here, we did not call the stream() method since the return type of rangeClosed is IntStream which will create a stream implicitly and then each and every element is passed in to the stream.
+
+Streams API - range(), rangeClosed(), count() and forEach()
+IntStream: IntStream has two methods.
+1. IntStream.range(1,50) -> Returns an IntStream of 49 elements from 1 to 49. This excludes the last element from the stream.
+2. IntStream.rangeClosed(1,50) -> Return an IntStream of 50 elements from 1 to 50. This doesn't exclude any element from the stream.
+
+````
+range():
+public static void range() {
+  System.out.println(IntStream.range(1, 50).count());
+  IntStream.range(1, 50).forEach(value -> System.out.print(value + ", "));
+  System.out.println();
+}
+
+rangeClosed():
+public static void rangeClosed() {
+  System.out.println(IntStream.rangeClosed(1, 50).count());
+  IntStream.rangeClosed(1, 50).forEach(value -> System.out.print(value + ", "));
+  System.out.println();
+}
+````
+
+LongStream:
+1. LongStream.range(1,50) -> Returns a LongStream of 49 elements from 1 to 49. This excludes the last element from the stream.
+2. LongStream.rangeClosed(1,50) -> Return a LongStream of 50 elements from 1 to 50. This doesn't exclude any element from the stream.
+
+````
+range():
+public static void rangeLong() {
+  System.out.println(LongStream.range(1, 50).count());
+  LongStream.range(1, 50).forEach(value -> System.out.print(value + ", "));
+  System.out.println();
+}
+
+rangeClosed():
+public static void rangeClosedLong() {
+  System.out.println(LongStream.rangeClosed(1, 50).count());
+  LongStream.rangeClosed(1, 50).forEach(value -> System.out.print(value + ", "));
+  System.out.println();
+}
+````
+
+DoubleStream:
+It does not support the range() and rangeClosed().
+There is an alternate approach in order to create a DoubleStream.
+There exists a method inside IntStream to create a stream as both Long and Double streams.
+
+````
+range():
+public static void rangeDouble() {
+  System.out.println(IntStream.range(1, 50).count());
+  IntStream.range(1, 50).asDoubleStream().forEach(value -> System.out.print(value + ", "));
+  System.out.println();
+}
+
+rangeClosed():
+public static void rangeClosedDouble() {
+  System.out.println(IntStream.rangeClosed(1, 50).count());
+  IntStream.rangeClosed(1, 50).asDoubleStream().forEach(value -> System.out.print(value + ", "));
+  System.out.println();
+}
+````
+
+Streams API - Numeric Stream - Aggregate Functions - sum(), max(), min() and average()
+Using IntStream we can calculate the aggregate values as shown in the below example. Except sum() all others return an OptionalInt (max and min) and OptionalDouble (average).
+
+max():
+````
+public static void intStreamMax() {
+  OptionalInt optionalInt = IntStream.rangeClosed(1, 50).max();
+  if (optionalInt.isPresent()) {
+    System.out.println("Max. value is: " + optionalInt.getAsInt());
+  } else {
+    System.out.println("input is empty");
+  }
+}
+````
+
+min():
+````
+public static void intStreamMin() {
+  OptionalLong optionalLong = LongStream.rangeClosed(1, 50).min();
+  if (optionalLong.isPresent()) {
+    System.out.println("Min. value is: " + optionalLong.getAsLong());
+  } else {
+    System.out.println("input is empty");
+  }
+}
+````
+
+average():
+````
+public static void intStreamAverage() {
+  OptionalDouble optionalDouble = DoubleStream.rangeClosed(1, 50).average();
+  if (optionalDouble.isPresent()) {
+    System.out.println("Average. value is: " + optionalDouble.getAsDouble());
+  } else {
+    System.out.println("input is empty");
+  }
+}
+````
+
+Streams API - Numeric Streams - boxing() and unboxing()
+1. boxing() - Converting a primitive type to a wrapper class type.
+Ex: Converting an int (primitive) to Integer (wrapper).
+
+Here, the boxed() method facilitates the conversion from a primitive type to a wrapper type.
+````
+public static List<Integer> boxing() {
+  return IntStream.rangeClosed(1, 50)
+    .boxed()
+    .collect(Collectors.toList());
+}
+````
+
+2. unboxing() - Converting a wrapper class type to its primitive type.
+Ex: Converting an Integer (wrapper) to int (primitive). Here, we use the intValue() method to unbox from Integer to int value. Since intValue returns back IntStream we can then use sum() method to get the summation of the stream content.
+
+````
+public static int unboxing(List<Integer> integerList) {
+  return integerList.stream()
+    .mapToInt(Integer::intValue)
+    .sum();
+}
+````
+
+Streams API - mapToObj(), mapToLong() and mapToDouble()
+1. mapToObj() -> Converts each element in a numeric stream to some Object.
+
+This will create an Integer object using the integer value in the stream. 
+````
+public static List<Integer> mapToObj() {
+  return IntStream.rangeClosed(1, 5).mapToObj(i -> new Integer(i)).collect(Collectors.toList());
+}
+````
+
+2. mapToLong() -> Converts a numeric stream to a LongStream. In case if you want to convert an Int Stream to a LongStream we can use this method. This accepts an input and returns the same output.
+
+````
+public static long mapToLong() {
+  return IntStream.rangeClosed(1, 5)
+    .mapToLong(i -> i) // converts IntStream to a LongStream
+    .sum();
+}
+````
+
+3. mapToDouble() -> Converts a numeric stream to a DoubleStream. This accepts an input and returns the same output.
+
+````
+public static long mapToLong() {
+  return IntStream.rangeClosed(1, 5)
+    .mapToDouble(i -> i) // converts IntStream to a DoubleStream
+    .sum();
+}
+````
+
+Stream API - Terminal Operations
+1. Terminal operations collects the data for you.
+2. Terminal operations starts the whole stream pipeline.
+
+Terminal Operations:
+1. forEach()
+2. min()
+3. max()
+4. reduce()
+5. collect()
+
+Here we will see what different approaches are present of collecting the data using the collect() method.
+
+The collect() method takes in an input of type Collector. It produces the result as per the input passed to the collect() method. Basically, the collect() method will be like an accumulator which is going to accumulate the result until the streams are exhausted.
+
+Terminal Operations:
+1. joining() - The joining() collector performs the String concatenation on the elements in the stream. So, joining() will be an input to the collect() method.
+
+joining() has three different overloaded versions.
+
+a. joining() - concatenates the input elements into a string
+
+````
+public static String joining() {
+  return StudentDatabase.getAllStudents().stream()
+    .map(Student::getName)
+    .collect(Collectors.joining());
+}
+````
+
+b. joining(CharSequence delimiter) - concatenates the input elements, separated by the specified delimiter.
+
+````
+public static String joiningWithDelimiter() {
+  return StudentDatabase.getAllStudents().stream()
+    .map(Student::getName)
+    .collect(Collectors.joining("-"));
+}
+````
+
+c. joining(CharSequence delimiter, CharSequence prefix, CharSequence suffix) - concatenates the input elements, separated by the specified delimiter, with the specified prefix and suffix.
+
+````
+public static String joiningWithDelimiterWithPrefix() {
+  return StudentDatabase.getAllStudents().stream()
+    .map(Student::getName)
+    .collect(Collectors.joining("-", "[", "]"));
+}
+````
+
+2. counting() - counting() collector returns the total number of elements the collector collected as a result.
+
+````
+public static long count() {
+  return StudentDatabase.getAllStudents()
+    .stream()
+    .filter(student -> student.getGpa() >= 3.9)
+    .collect(Collectors.counting());
+}
+````
+
+3. mapping() - mapping() collector applies a transformation function first and then collects the data in a collection (could be any type of collection).
+
+````
+public static void mapping() {
+  Set<String> namesSet = StudentDatabase.getAllStudents()
+    .stream()
+    .collect(mapping(Student::getName,
+      toSet())); // this avoids the additional map intermediate operation.
+
+    List<String> namesList = StudentDatabase.getAllStudents()
+      .stream()
+      .collect(mapping(Student::getName,
+        toList())); // this avoids the additional map intermediate operation.
+}
+````
+
+4. maxBy() - This method takes in a Comparator as an input parameter and gives an Optional as an output. This collector is used in conjunction with a Comparator. It returns the max element based on the property passed to the Comparator.
+
+````
+public static Optional<Student> maxByOperation() {
+  return StudentDatabase.getAllStudents().stream()
+    .collect(Collectors.maxBy(Comparator.comparing(Student::getGpa)));
+}
+````
+
+5. minBy() - This method takes in a Comparator as an input parameter and gives an Optional as an output. This collector is used in conjunction with a Comparator. It returns the min element based on the property passed to the Comparator.
+
+````
+public static Optional<Student> minByOperation() {
+  return StudentDatabase.getAllStudents().stream()
+    .collect(Collectors.minBy(Comparator.comparing(Student::getGpa)));
+}
+````
+
+6. summingInt() - this collector returns the sum as a result.
+
+````
+public static int summingIntOperation() {
+  return StudentDatabase.getAllStudents().stream()
+    .collect(Collectors.summingInt(Student::getNoteBooks));
+}
+````
+
+7. averagingInt() - this collector returns the average as a result.
+
+````
+public static double averagingIntOperation() {
+  return StudentDatabase.getAllStudents().stream()
+    .collect(Collectors.averagingInt(Student::getNoteBooks));
+}
+````
+
+8. groupingBy() - 
+a. groupingBy() collector is equivalent to the groupBy() operation in SQL.
+b. Used to group the elements based on a property that is passed to the groupingBy collector.
+c. The output of the groupingBy() is going to be Map<K,V>. K is the input to the groupingBy() method and V will be the output.
+
+There are 3 different versions of groupingBy():
+a. groupingBy(classifier) - determines the classification value that needs to be applied to the stream input.
+
+Here, the key will hold the value "male" and "female" since we are passing gender as the parameter to the groupingBy() method.
+````
+public static void groupStudentsByGender() {
+  Map<String, List<Student>> studentMap = StudentDatabase.getAllStudents().stream()
+    .collect(Collectors.groupingBy(Student::getGender));
+}
+````
+
+However, we can also have customized key for the map. The below method will return a map with keys OUTSTANDING for students having the GPA >= 3.8 and AVERAGE otherwise.
+
+````
+public static void groupStudentsCustom() {
+  Map<String, List<Student>> studentMap =
+      StudentDatabase.getAllStudents().stream()
+          .collect(
+              Collectors.groupingBy(
+                  student -> student.getGpa() >= 3.8 ? "OUTSTANDING" : "AVERAGE"));
+}
+````
