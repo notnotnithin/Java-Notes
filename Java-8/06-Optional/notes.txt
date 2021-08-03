@@ -1,0 +1,184 @@
+Introduction to Optional:
+1. Introduced as part of Java 8 to represent a non-null value.
+2. Main purpose of this was to provide a way to avoid the most common exceptions like NullPointerException and avoid having too many null checks.
+3. Concept was inspired from other new languages such as Scala, Groovy etc.
+
+If you take a look at this example, we have unnecessary multiple null checks in many places.
+
+````
+public static String getStudentName() {
+  // Student student = StudentDataBase.studentSupplier.get();
+  Student student = null;
+  if (student != null) {
+    return student.getName();
+  } else {
+    return null;
+  }
+}
+
+public static void main(String[] args) {
+  String studentName = getStudentName();
+  if (studentName != null)
+    System.out.println("Student name is : " + studentName);
+  else
+    System.out.println("Name is empty.");
+}
+````
+
+Using optional:
+We are wrapping the actual Student object inside Optional.ofNullable() which returns us Optional<Student> which has necessary methods to check whether a valid object is present inside the Optional object. Instead of returning a plain old null object, we return Optional.empty() which returns an optional object with no value.
+
+````
+public static Optional<String> getStudentNameOptional() {
+
+  Optional<Student> student = Optional.ofNullable(StudentDatabase.studentSupplier.get());
+  // Optional<Student> student = Optional.ofNullable(null); // returns Optional.empty()
+
+  if (student.isPresent()) {
+    // don't get confused this with streams map method. Both are different.
+    return student.map(Student::getName);
+  }
+  return Optional.empty();
+}
+
+public static void main(String[] args) {
+  Optional<String> stringOptional = getStudentNameOptional();
+  
+  if (stringOptional.isPresent()) {
+    System.out.println(getStudentNameOptional().get());
+  } else {
+    System.out.println("Name is returned as empty.");
+  }
+}
+````
+
+The difference between the null and the Optional.empty() is that we can still execute a method call on an empty optional object. When we were returning a "null", anything can be null - a string can be null, a Student can be null. Also, Optional has a variety of methods which we can use in different scenarios.
+
+Optional:
+1. ofNullable():
+a. Part of Optional object.
+b. Used to return an Optional<String> object with the "Hello" string wrapped inside an Optional object.
+
+````
+public static Optional<String> ofNullable() {
+  return Optional.ofNullable("Hello");
+}
+
+public static void main(String[] args) {
+  System.out.println(ofNullable().get());
+}
+````
+
+c. We use ofNullable() if we are not certain if the input is going to be a valid input all the time.
+
+2. of():
+a. Part of Optional object.
+b. Used to return an Optional<String> object with the "Hello" string wrapped inside an Optional object.
+c. This method always expects us to provide a valid input. If we pass a null value we get a NullPointerException.
+
+````
+public static Optional<String> of() {
+  return Optional.of("Hello");
+  // return Optional.of(null); // NullPointerException
+}
+````
+
+3. empty():
+a. Part of Optional object.
+b. This returns us an empty object as a result.
+c. We can use this in the exception block in the methods which return us Optional object.
+
+````
+public static Optional<String> empty() {
+  return Optional.empty();
+  // return  Optional.of(null);
+}
+````
+
+4. orElse():
+Consider the following method where we are querying for the student name.
+We would want to return a default value in any of the use cases we can use orElse().
+
+````
+public static String optionalOrElse() {
+  Optional<Student> optionalStudent = Optional.ofNullable(StudentDatabase.studentSupplier.get());
+  String name = optionalStudent.map(Student::getName).orElse("Anonymous");
+  return name;
+}
+````
+
+5. orElseGet():
+We would want to return a default value in any of the use cases we can use orElseGet(). The only difference is it accepts a Supplier.
+
+````
+public static String optionalOrElseGet() {
+  Optional<Student> optionalStudent = Optional.ofNullable(null);
+  String name = optionalStudent.map(Student::getName).orElseGet(() -> "Anonymous");
+  return name;
+}
+````
+
+6. orElseThrow():
+If in case, the name is null, then this would throw an exception. The only difference is it accepts a Supplier just like orElseGet().
+
+````
+public static String optionalOrElseThrow() {
+  Optional<Student> optionalStudent = Optional.ofNullable(null);
+
+  String name = optionalStudent.map(Student::getName)
+      .orElseThrow(() -> new RuntimeException("No Data available"));
+  return name;
+}
+````
+
+7. isPresent(): Checks if the Optional object has some value in it or not.
+
+````
+Optional<String> stringOptional = Optional.ofNullable("Hello Optional");
+if (stringOptional.isPresent()) {
+  System.out.println(stringOptional.get());
+}
+````
+
+8. ifPresent(): Same as isPresent() however, in addition to checking whether an object is present or not, ifPresent() it lets you perform an additional operation on top of that optional object with the help of a Consumer functional interface as in input.
+
+````
+Optional<String> ifPresentOptional = Optional.ofNullable("Hello Optional");
+ifPresentOptional.ifPresent(System.out::println);
+````
+
+9. filter(): Apart from the Streams API, Optional also has a filter() method in it.
+
+````
+public static void optionalFilter() {
+  Optional<Student> studentOptional = StudentDatabase.getOptionalStudent()
+    .filter(student -> student.getGpa() >= 4.3);
+  studentOptional.ifPresent(student -> System.out.println(student));
+}
+````
+
+10. map():
+
+````
+public static void optionalMap() {
+  Optional<Student> studentOptional = StudentDatabase.getOptionalStudent();
+
+  if (studentOptional.isPresent()) {
+    Optional<String> nameOptional = studentOptional.map(Student::getName);
+    System.out.println("optional map: " + nameOptional);
+  }
+}
+````
+
+
+11. flatMap():
+
+````
+public static void optionalFlatMap() {
+  Optional<Student> studentOptional = StudentDatabase.getOptionalStudent();
+  if (studentOptional.isPresent()) {
+    Optional<Bike> bikeOptional = studentOptional.flatMap(Student::getBike); //
+    System.out.println("optional flat map: " + bikeOptional);
+  }
+}
+````
