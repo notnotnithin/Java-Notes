@@ -1,0 +1,67 @@
+Introduction to new date/time libraries:
+a. LocalDate, LocalTime and LocalDateTime and are part of java.time package.
+b. These new classes are created with the inspiration from the Joda-Time library.
+c. All the new time libraries are Immutable which promote functional programming.
+d. Supporting classes like Instant, Duration, Period etc.
+e. We used Date and Calendar prior to Java 8.
+
+LocalDate: Used to represent the date.
+LocalTime: Used to represent the time. 
+LocalDateTime: Used to represent the date and time.
+
+LocalDate: To create a local date, we use the static now() method which is a part of the LocalDate class. This will return the current machine date.
+
+````
+LocalDate localDate = LocalDate.now();
+````
+
+LocalTime: To create a local time, we use the static now() method which is a part of the LocalTime class. This will return the current machine time.
+
+````
+LocalTime localTime = LocalTime.now();
+````
+
+LocalDateTime: To create a local date time, we use the static now() method which is a part of the LocalDateTime class. This will return the current machine date and time.
+
+````
+LocalDateTime localDateTime = LocalDateTime.now();
+````
+
+Other ways of creating LocalDate:
+1. of() - This takes 3 parametes - year, month and date. It returns the instance of the LocalDate.
+
+````
+LocalDate localDate1 = LocalDate.of(2018, 03, 03);
+````
+
+2. ofYearDay() - This takes in 2 parameters - year and day of the year.
+
+````
+LocalDate.ofYearDay(2018, 02); // output: 2018-01-02
+````
+
+Reading values from LocalDate: 
+We can read all sorts of values from the given date.
+
+````
+localDate.getMonth(); // AUGUST
+localDate.getMonthValue(); // 8
+localDate.getDayOfWeek(); // WEDNESDAY
+localDate.getDayOfYear(); // 216
+localDate.getYear(); // 2021
+localDate.get(ChronoField.DAY_OF_MONTH); // WEDNESDAY
+````
+
+Modifying values in LocalDate:
+These below months update the given local date by creating a new LocalDate instance there by not disturbing the actual LocalDate instance.
+
+````
+localDate.plusWeeks(1)
+localDate.plusYears(1)
+localDate.plusDays(1)
+localDate.plusMonths(1)
+localDate.minusMonths(1)
+localDate.minus(2, ChronoUnit.YEARS)
+localDate.withYear(2019)
+localDate.with(ChronoField.YEAR, 2019)
+````
