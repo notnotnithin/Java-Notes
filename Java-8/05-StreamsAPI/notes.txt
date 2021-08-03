@@ -680,3 +680,26 @@ public static void groupStudentsCustom() {
                   student -> student.getGpa() >= 3.8 ? "OUTSTANDING" : "AVERAGE"));
 }
 ````
+
+Parallel Streams: 
+Splits the source of data into multiple parts, processes them concurrently/parallelly and combine the result and give you the result as output.
+
+Ex:
+Sequential Stream:
+IntStream.rangeClosed(1, 100).sum();
+
+Parallel Stream:
+IntStream.rangeClosed(1, 100)
+  .parallel()
+  .sum();
+
+How does the parallel streams work?
+Parallel Stream uses the Fork/Join framework that got introduced in Java 7. Fork/Join framework creates multiple threads for us.
+
+NOTE:
+Number of threads created = number of processors available in the machine.
+
+To check the number of processors on a machine:
+Runtime.getRuntime().availableProcessors();
+
+In case of parallel streams, behind the scenes the data source is split into multiple parts and each data is assigned to separate processor which will then take care of performing things parallelly and provide the final result to us.
