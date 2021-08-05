@@ -1,61 +1,44 @@
 The most common requirement in software programming today is that any code that we write needs to execute and perform faster.
 
-So what are the problems that the parallel and asynchronous programming styles are trying to solve?
+***So what are the problems that the parallel and asynchronous programming styles are trying to solve?***
 In a nutshell, the goal of both of these programming styles is to provide techniques to improve and increase the performance of the code that we write. Parallel and asynchronous programming styles are fundamentally used for totally different types of use cases.
 
-What's driving these concepts to be part of Java?
+***What's driving these concepts to be part of Java?***
 We have significant technology advancements happening in both hardware and software side.
 
-`````````
-Hardware:
-a. Number one is the advancements to the modern devices that we use day to day, whether it be a mobile device or a computer. All these machines or devices come up with multiple cores.
+| Hardware      | Software |
+| ------------- | ------------- |
+| Number one is the advancements to the modern devices that we use day to day, whether it be a mobile device or a computer. All these machines or devices come up with multiple cores.  | Architecture style that we use in software development today. Micro Services architecture is very popular and pretty much most of the enterprises have already migrated to this architecture or in the process of moving to this architecture.  |
+| So as a developer, there is a need to learn programming patterns to maximize the use of multiple cores for faster code execution.  | Most of these interactions are Blocking IO calls, which basically exhibits the synchronous behavior. Any time we make a blocking call, it leads to waste of resources because we are being blocked and waiting for data. This also impacts the latency and performance of the application.  |
+| To bring the technology advancements and the parallel and programming styles together and in order to maximize the use of CPU cores, all we got to do is apply the parallel programming concepts. So as a developer, we have a need to learn about programming patterns that's going to maximize the use of all the available CPU cores.  | To bring the technology advancements and the parallel and programming styles together and in order to maximize the use of CPU cores, all we got to do is apply the parallel programming concepts. So as a developer, we have a need to learn about programming patterns that's going to maximize the use of all the available CPU cores.  |
+| To apply the parallel programming concepts, we will be exploring the Parallel Streams API.  | To apply the parallel programming concepts, we will be exploring the Parallel Streams API.  |
 
-b. So as a developer, there is a need to learn programming patterns to maximize the use of multiple cores for faster code execution.
+**NOTE:**
 
-c. To bring the technology advancements and the parallel and programming styles together and in order to maximize the use of CPU cores, all we got to do is apply the parallel programming concepts. So as a developer, we have a need to learn about programming patterns that's going to maximize the use of all the available CPU cores.
+There are two common themes that comes with these two APIs. 
+1. First, both of these programming styles involve threads to improve the performance of the code. 
+2. Second, both of these programming styles or APIs use the functional style of programming.
 
-d. To apply the parallel programming concepts, we will be exploring the Parallel Streams API.
-`````````
-Software:
-a. Architecture style that we use in software development today. Micro Services architecture is very popular and pretty much most of the enterprises have already migrated to this architecture or in the process of moving to this architecture.
+**Evolution of concurrency and parallelism APIs in JAVA**
 
-b. Most of these interactions are Blocking IO calls, which basically exhibits the synchronous behavior. Any time we make a blocking call, it leads to waste of resources because we are being blocked and waiting for data. This also impacts the latency and performance of the application.
-
-c. With MicroServices architecture in place, in order to improve the latency and effective resource usage, there is a need for every Java developer to learn and apply the asynchronous programming patterns to write asynchronous or non-blocking code.
-
-d. To apply the asynchronous programming concepts, we will be exploring the CompletableFuture API.
-
-NOTE: There are two common themes that comes with these two APIs. 
-One, both of these programming styles involve threads to improve the performance of the code. Two, both of these programming styles or APIs use the functional style of programming.
-
-Evolution of concurrency and parallelism APIs in JAVA
 Having the knowledge about the evolution will help you to relate why the concurrency APIs in Java continue to evolve with the change in technology and software architectures around it. 
 
-The very first release of Java was Java1 in 1996, had threads in it. Any experienced veteran Java developers must have experience working with that, even if we have not. Threads gave Java the foundation to step into concurrency. Historically, threads were used to offload the work from the actual thread, executing a function and run those tasks as a background or tasks. Threads are pretty low level API and the code that we write with threads can get complex very easily. It had its own limitations. 
+1. The very first release of Java was Java1 in 1996, had threads in it. Any experienced veteran Java developers must have experience working with that, even if we have not. Threads gave Java the foundation to step into concurrency. Historically, threads were used to offload the work from the actual thread, executing a function and run those tasks as a background or tasks. Threads are pretty low level API and the code that we write with threads can get complex very easily. It had its own limitations. 
+2. Around 2004 Java5 got released. This is a time where multi-cores became popular and pretty much all the devices and machines came with multiple cores. In order to fully utilize all the cores in the CPU, the Java language came up with some really cool advanced features like ThreadPool, ExecutorService, Futures, BlockingQueues, Concurrent collections and more. This enabled the developers to achieve a task based concurrency model where the developers need not have to work with thread APIs directly anymore. The basic idea with ThreadPool is that, submit a task to the ThreadPool and then the result is available once the task is executed. ThreadPools were great, but still it had some issues like deadlock and more. From a coding perspective, the code that you write can get tedious, actually. 
+3. In 2011, we got Java seven released, actually. This is the time where the data parallelism became popular and Java introduced the Fork/Join framework, which eventually brought in the Foundation for parallelism into the Java world. Even though Fork/Join framework was great in applying data parallelism, but it's still complex to code and work directly.
+4. In 2014, In 2014, we had a big release for Java, which is Java8. Probably, this is one of the biggest releases in Java, which had some excellent features like lambdas, streams and more. From a concurrent feature standpoint, we had Parallel Streams and CompletableFuture as part of Java8. This is when Java stepped its foot into the functional programming side. What this allows us to do is it enables a functional parallelism support in Java. These are the two modern APIs that we will use to write the asynchronous and parallel code. 
+5. In 2017, Java9 got released. This release had a newer type, which is a Flow API, which enabled a Reactive Programming in Java, which is a pub/sub style of programming. This introduced a complete shift from the way we normally write code. 
+6. The current version of Java that we are using is Java 14.
 
-Around 2004 Java5 got released. This is a time where multi-cores became popular and pretty much all the devices and machines came with multiple cores. In order to fully utilize all the cores in the CPU, the Java language came up with some really cool advanced features like ThreadPool, ExecutorService, Futures, BlockingQueues, Concurrent collections and more. This enabled the developers to achieve a task based concurrency model where the developers need not have to work with thread APIs directly anymore. The basic idea with ThreadPool is that, submit a task to the ThreadPool and then the result is available once the task is executed. ThreadPools were great, but still it had some issues like deadlock and more. From a coding perspective, the code that you write can get tedious, actually. 
-
-In 2011, we got Java seven released, actually. This is the time where the data parallelism became popular and Java introduced the Fork/Join framework, which eventually brought in the Foundation for parallelism into the Java world. Even though Fork/Join framework was great in applying data parallelism, but it's still complex to code and work directly.
-
-In 2014, In 2014, we had a big release for Java, which is Java8. Probably, this is one of the biggest releases in Java, which had some excellent features like lambdas, streams and more. From a concurrent feature standpoint, we had Parallel Streams and CompletableFuture as part of Java8. This is when Java stepped its foot into the functional programming side. What this allows us to do is it enables a functional parallelism support in Java. These are the two modern APIs that we will use to write the asynchronous and parallel code. 
-
-In 2017, Java9 got released. This release had a newer type, which is a Flow API, which enabled a Reactive Programming in Java, which is a pub/sub style of programming. This introduced a complete shift from the way we normally write code. 
-
-The current version of Java that we are using is Java 14.
-
-Concurrency vs Parallelism:
+**Concurrency vs Parallelism:**
 Developers normally think and understand concurrency and parallelism interchangeably, and some think both are the same.
 
-Concurrency: 
-Firstly, concurrency is a concept where two or more tasks can run simultaneously in Java. Concurrency is achieved out of the box using Threads.
-
-The definition of concurrency in itself is vague. What do we mean by that? I said two or more tasks can run simultaneously. Does it mean the tasks are running in interleaved fashion? Are whether the tasks run simultaneously at the same time? It's totally based on the underlying core that you're are trying to run this program.
-
-If you're running multiple tasks in a single core machine, then it means that the task are  running in an interleaved fashion because there is only one core. CPU has a scheduler that takes care of scheduling these multiple threads to run on the core in an interleaved fashion.
-
-If you are running multiple tasks in a multiple core machine, then it means the tasks are running simultaneously.
-
-Let's quickly look at this using one simple example.
+***Concurrency:***
+1. Firstly, concurrency is a concept where two or more tasks can run simultaneously in Java. Concurrency is achieved out of the box using Threads. 
+2. The definition of concurrency in itself is vague. What do we mean by that? I said two or more tasks can run simultaneously. Does it mean the tasks are running in interleaved fashion? Are whether the tasks run simultaneously at the same time? It's totally based on the underlying core that you're are trying to run this program. 
+3. If you're running multiple tasks in a single core machine, then it means that the task are  running in an interleaved fashion because there is only one core. CPU has a scheduler that takes care of scheduling these multiple threads to run on the core in an interleaved fashion.
+4. If you are running multiple tasks in a multiple core machine, then it means the tasks are running simultaneously.
+5. Let's quickly look at this using one simple example.
 
 ````
 public class HelloWorldThreadExample {
@@ -92,41 +75,33 @@ This is a simple Hello World example and it uses threads. As we can see here, we
 
 One important thing I would like to call out is that in a real time app threads normally interact with each other to perform a computation via shared objects or messaging queues.
 
-In this example, threads are interacting with each other via the shared variable named result. There is a popular term in the software industry "where a shared object is the root of all evil". It's totally true because when you start to work on a shared object via multiple threads issues like race condition, deadlocks and a variety of many more issues can occur which results in bugs and errors in your program.
+In this example, threads are interacting with each other via the shared variable named result. There is a popular term in the software industry where **"a shared object is the root of all evil"**. It's totally true because when you start to work on a shared object via multiple threads issues like race condition, deadlocks and a variety of many more issues can occur which results in bugs and errors in your program.
 
-In order to solve these issues, Java have a variety of tools available. Some of the examples are synchronized statements, methods, reentrant locks, semaphores, concurrent collections and conditional objects and more.
+In order to solve these issues, Java have a variety of tools available. Some of the examples are synchronized statements, methods, reentrant locks, semaphores, concurrent collections and conditional objects and more. So the current state of concurrency is about making sure the shared resources are accessed correctly and efficiently. That's all about concurrency.
 
-So the current state of concurrency is about making sure the shared resources are accessed correctly and efficiently. So that's all about concurrency.
+***Parallelism:***
+1. Now let's switch gears and talk about parallelism. Parallelism is a concept in which two or more tasks are literally going to run in parallel. This is one of the important difference between concurrency and parallelism.
 
-Parallelism:
-Now let's switch gears and talk about parallelism. Parallelism is a concept in which two or more tasks are literally going to run in parallel. This is one of the important difference between concurrency and parallelism.
-
-Parallelism involves these following steps. 
-1. Decomposing the tasks into multiple subtasks which is also known as "Forking". 
-2. Executing these tasks in sequential. 
-3. "Joining" the results of these individual tasks into a single result.
+2. Parallelism involves these following steps. 
+   1. Decomposing the tasks into multiple subtasks which is also known as "Forking". 
+   2. Executing these tasks in sequential. 
+   3. "Joining" the results of these individual tasks into a single result.
 
 This whole process is also known as Fork/Join.
 
-In Fork/Join, we have the task at the top. The first step of parallelism is to split the tasks into multiple subtasks. The tasks need to be broken down to a size where it cannot be split further. This whole process is called Forkinh and then execute the tasks. Once the tasks are executed, then we need to combine the tasks to produce the final result. This whole process is called Fork/Join. This whole concept got introduced as part of the Java7.
+3. In Fork/Join, we have the task at the top. The first step of parallelism is to split the tasks into multiple subtasks. The tasks need to be broken down to a size where it cannot be split further. This whole process is called Forkinh and then execute the tasks. Once the tasks are executed, then we need to combine the tasks to produce the final result. This whole process is called Fork/Join. This whole concept got introduced as part of the Java7.
 
-Let's quickly look at parallelism using a simple example.
+4. Let's quickly look at parallelism using a simple example.
 
-The use case that we have here is to transform the string to uppercase, so we have a list of names - Bob, Jamie, Jill and Rick, and we are going to convert the names to uppercase string using the parallelism mechanism.
+The use case that we have here is to transform the string to uppercase, so we have a list of names - Bob, Jamie, Jill and Rick, and we are going to convert the names to uppercase string using the parallelism mechanism. The input here is a lowercase and the output here is the uppercase and this is the expected result.
 
-The input here is a lowercase and the output here is the uppercase and this is the expected result.
+5. The very first step is the fork step, meaning splitting the structure into its least possible size. Here, the data structure that we have is a list, so the least possible size is a data element of size one. At the end of step one, we have the list split into individual elements.
 
-The very first step is the fork step, meaning splitting the structure into its least possible size. Here, the data structure that we have is a list, so the least possible size is a data element of size one.
+6. The second step is actually processing the elements sequentially. So here each and every element is processed sequentially. The processing logic is nothing but transforming the element to uppercase. So as a result of the second step, the data is converted to uppercase.
 
-At the end of step one, we have the list split into individual elements.
+7. The third step is the join phase where we will combine the results step by step to produce the final result. In a nutshell, this is how the parallelism works.
 
-The second step is actually processing the elements sequentially. So here each and every element is processed sequentially. The processing logic is nothing but transforming the element to uppercase. So as a result of the second step, the data is converted to uppercase.
-
-The third step is the join phase where we will combine the results step by step to produce the final result. In a nutshell, this is how the parallelism works.
-
-Before we move on to the next slide, I would like to quickly talk about step two which is processed sequentially. 
-
-What happens behind the scenes from the execution standpoint?
+***What happens behind the scenes from the execution standpoint?***
 Here, we have the list split into individual elements. Assume we have multiple cores in the machine, for example, 4 cores. The next step would be to execute the uppercase operation sequentially to produce the result given here. 
 
 From a developer point of view, you might be wondering, how can we fork and join the list that's used in this example?
@@ -147,12 +122,12 @@ public static List<String> getNamesList() {
 
 Here, we have used Streams API in this example. All you got to do to enable Fork/Join operation is you just have to invoke the parallelStream() operation. It takes care of splitting the data structure and run the uppercase operation and perform the join operation. It is as simple as that. This is the beauty of functional programming and all the modern APIs that are introduced in Java recently.
 
-Summarizing concurrency and parallelism.
+**Summarizing concurrency and parallelism**
 Concurrency is a concept where two or more tasks can run simultaneously based on the number of cores that you have in your machine. Concurrency can be implemented in a single or multicore machines. Concurrency is about correctly and efficiently controlling the access to shared resources.
 
 Parallelism is a concept where two or more tasks are literally running simultaneously.Parallelism can only be implemented in multiple code machine. Parallelism is about using more resources to get the answer faster.
 
-Threads and its limitations:
+**Threads and its limitations**
 1. Threads got released as part of Java1, and it's still part of the current version of Java.
 2. Threads are normally used to offload blocking tasks as background tasks. Basically, threads allowed the developers to write asynchronous style of code.
 
@@ -358,129 +333,82 @@ How does this Fork/Join framework works?
 Fork/Join framework has a dedicated pool named Fork/Join pool to support parallelism.
 
 ***The internals of a Fork/Join pool***: 
-Fork/Join Pool has a Shared Work Queue to which the clients submit the task. The next thing in the Fork/Join pool is the worker threads. Assume 4 threads T1, T2, T3 and T4.
+1. Fork/Join Pool has a Shared Work Queue to which the clients submit the task. The next thing in the Fork/Join pool is the Worker Threads. Let's assume 4 threads T1, T2, T3 and T4 and each thread has a double-ended work queue which is also named as deck in Java.
+2. Client submits a ForkJoinTask to the shared work queue because the Fork/Join pool can only work or accept ForkJoinTask because a ForkJoinTask is different from a regular task as it has the ability to split the task into subtask and join them up for execution.
+3. Now the task is submitted into the shared queue and each and every thread in the double-ended work queue continuously poll the shared work queue for new tasks and the task gets taken by one of the threat that's available in the shared work queue. Assume, T1 thread picks up the task and it gets placed under T1 double-ended work queue.
+4. The task in the deck are always processed in the LIFO order. The reason being, it improves the locality and cache performance for the execution of these tasks. If the task can still be further divided into subtask, then it will be divided into subtask and placed in the same work queue. 
+5. Assume, if in our pool of 4 threads all the tasks piled up in T1's work queue alone for some reason. This is definitely not efficient. This is where a new concept named Work Stealing comes into picture. This feature makes the Fork/Join framework a standout compared to the others. 
+6. Work Stealing is a concept where the other threads in the pool check each other's work queue for tasks. In our assumption, the T1 work queue is filled with tasks. So all the other threads are going to steal the work from the other end of the queue such that the actual work that's being executed by the thread T1 is not impacted. This is one of the reason we have a double-ended queue. Once the tasks are executed, the results will be shared to the client. 
 
-And each thread has a double network which is also named as a deck in Java.
+As a whole, this is how the Fork/Join pool works. The underlying working off Fork/Join framework is really complex compared to the ExecutorService but it is good to have this knowledge as a developer.
 
-I will explain about the significance of the double and the Q and A Glines basically submit the form
+***ForkJoinTask***:
 
-joint task to the shared Q because the first joint pool can only work or except for joint tasks because
+**What is a ForkJoinTask?**
 
-of our joint task is different from a regular task.
+A ForkJoinTask represents part of the data and its computation.
 
-It has the ability to split the task and do subtask and join them up for execution.
+In our example, a fine-grained ForkJoinTask would be the individual elements of the list along with its computation which is the uppercase operation. Here, ***Bob, Jamie, Jill and Rick*** will be split into 4 different ForkJoinTask and it's computation, which is the uppercase operation.
 
-You'll will be able to understand this when we get to the coding part.
+From a developer perspective, we need to write code that's going to perform this splitting operation into individual elements and perform the uppercase operation and join the result. If we want to work with Fork/Join pool, then you can only submit the ForkJoinTask. 
 
-For now, just keep this in your head.
+***What are the types of tasks that we can submit?***
 
-Now the task is submitted into the shared Q Each and every thread and the work you continuously pull,
+1. **ForkJoinTask:**
+   This class is specifically created to work with the Fork/Join pool. In reality, the application normally does not work with ForkJoinTask class. This is mostly used by the Java creators for internal purposes. There are two separate classes which are normally used by the developers to interact with the Fork/Join pool. 
 
-the shared work you for new tasks are work and the task gets taken by one of the threat that's available.
+2. **RecursiveTask:** 
+   This is a class which is specifically used in scenarios where the task is going to return a value. In our example, we pass in a name and it performs the uppercase operation and returns the result. In this case, we would use the RecursiveTask. 
+   
+3. **RecursiveAction:** 
+   This is a type of class which is basically used when you don't have anything to return but still you would like to apply the data parallelism on it. In a nutshell, this is how you will choose between the RecursiveTask and RecursiveAction.
 
-And the work you in this example, the third one picks up the task and it gets placed under threat.
+````
+public class ForkJoinUsingRecursion extends RecursiveTask<List<String>> {
 
-Once work you do the task in the deck are always processed in the life order which just last in first
+  private List<String> inputList;
 
-out all.
+  public ForkJoinUsingRecursion(List<String> inputList) {
+    this.inputList = inputList;
+  }
 
-The reason being it improves the locality and cache performance for the execution of these tasks.
+  public static void main(String[] args) {
 
-If the task can still be further divided into subtask, then it will be divided into subtask and placed
+    stopWatch.start();
+    List<String> resultList;
+    List<String> names = DataSet.namesList();
+    ForkJoinPool forkJoinPool = new ForkJoinPool();
+    ForkJoinUsingRecursion forkJoinUsingRecursion = new ForkJoinUsingRecursion(names);
+    resultList = forkJoinPool.invoke(forkJoinUsingRecursion);
 
-in the same work.
+    stopWatch.stop();
+    log("Final Result : " + resultList);
+    log("Total Time Taken : " + stopWatch.getTime());
+  }
 
-You if you all can take a step back and look at the slide here.
+  private static String addNameLengthTransform(String name) {
+    delay(500);
+    return name.length() + " - " + name;
+  }
 
-We have a pool of four tracks, but still all the tasks are piled up and thread.
+  @Override
+  protected List<String> compute() {
+    if (inputList.size() <= 1) {
+      List<String> resultList = new ArrayList<>();
+      inputList.forEach(name -> resultList.add(addNameLengthTransform(name)));
+      return resultList;
+    }
+    int midPoint = inputList.size() / 2;
+    ForkJoinTask<List<String>> leftInputList =
+        new ForkJoinUsingRecursion(inputList.subList(0, midPoint)).fork();
+    inputList = inputList.subList(midPoint, inputList.size());
+    List<String> rightResult = compute();// recursion
+    List<String> leftResult = leftInputList.join();
+    leftResult.addAll(rightResult);
+    return leftResult;
+  }
+}
+````
 
-Once work you you might be thinking the threads are not efficiently used.
-
-That's totally correct.
-
-I'm going to introduce you all to a new concept named Work Stealing.
-
-This feature makes the foreground framework a standout compared to the other one's work.
-
-Stealing is a concept where the other threads in the pool check each other's work you for tasks.
-
-In this example, the third one working with Fullwood task.
-
-So all the threads are going to steal the work from the other end of the queue.
-
-So the actual work that's being executed by the third P1 as not impacted.
-
-This is one of the reason we have a double standard queue, once the tasks are executed, then the result
-
-will be shared to the client as a whole.
-
-This is how the four giant pool works.
-
-The underlying working off Thorbjoern framework is really complex compared to the ExecutorService,
-
-but it is good to have this knowledge as a developer.
-
-The next topic as part of the Forgan framework is the For Joint Task.
-
-So what is a full joint task for joint task?
-
-The present part of the data and its computation.
-
-So in this example, you know, Fine-grained for Joint Task would be the individual elements of the
-
-list.
-
-And along with that computation, which is the uppercase operation in here.
-
-Bob Jamy, Jill Rick will be split into four different four joint tasks.
-
-And it's computation, which is the output.
-
-This operation from a developer perspective, we need to write code that's going to perform this splitting
-
-operation into individual elements and perform the uppercase operation and join the result.
-
-You'll be able to understand all of these when we get to the coding part.
-
-And the next lecture, as I mentioned before, if we want to work with four joint, then you can only
-
-submit the four joint task.
-
-So what are the types of tasks that we can submit?
-
-We have a class of type named for Joint Task, specifically created to work with the four joint.
-
-In reality, the application normally does not work with for Joint Task Force.
-
-This is mostly used by the Java creators for internal purposes.
-
-There are two separate classes which are normally used by the developers to interact with the four joint
-
-pool, and one is the recursive tasks.
-
-This is a class which is specifically used in scenarios where the task is going to return a value.
-
-In this example here we present a name and it performs the uppercase operation and returns the result.
-
-So in this case, we would use the recursive task, recursive action as a type of class which is basically
-
-used when you don't have anything to return.
-
-But still you would like to apply the data parallelism on it.
-
-I don't have a specific use case for a course of action, but in a nutshell, this is how you will choose
-
-between the recursive task and recursive action.
-
-I must tell you that I have introduce you to a lot of things in this lecture.
-
-If we have any clarifications or questions, please shoot me.
-
-Your question and Q&A.
-
-I would be happy to clear your clarification.
-
-If you are still confused after reaching to this part of the lecture, I would recommend you to watch
-
-it one more time.
-
+**Drawbacks of Fork/Join framework**
+First and foremost, we should agree to the fact that whatever code we have written above is really complex and it is not developer friendly. But this is what we had in Java7 before Streams API was released as part of Java8 for data parallelism.
