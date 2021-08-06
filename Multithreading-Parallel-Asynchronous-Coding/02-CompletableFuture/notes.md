@@ -199,3 +199,248 @@ public CompletableFuture<String> worldFuture(String input) {
 
 * The difference between thenApply() and thenCompose() is that thenApply() deals with functions that return a value, not a Future.
 * The thenCompose() method returns a CompletableFuture<T>.
+
+**Exception Handling in CompletableFuture**
+
+Let's see the techniques that are available in CompletableFuture to handle them. Let's talk about the traditional exception handling in Java first. 
+
+***Traditional Approach:***
+
+* Exception handling in Java is available since the inception of Java. 
+* Traditionally, exception handling is done by using the try-catch block. So you'll have the actual code statements inside the try block and the exception handling code inside the catch block.
+
+***Using CompletableFuture***
+
+* With CompletableFuture, you have different options available for exception handling. As we all know by now, CompletableFuture is a functional style API. 
+* Here is an example code.
+
+````
+public String helloWorldMultipleAsyncCalls() {
+  startTimer();
+  CompletableFuture<String> hello =
+      CompletableFuture.supplyAsync(() -> helloWorldService.hello());
+  CompletableFuture<String> world =
+      CompletableFuture.supplyAsync(() -> helloWorldService.world());
+  CompletableFuture<String> hiCompletableFuture =
+      CompletableFuture.supplyAsync(
+          () -> {
+            delay(1000);
+            return " Hi CompletableFuture!";
+          });
+
+  // first argument represents the result of hello.
+  // second argument represents the result of world.
+  // join() will block the main thread and returns the result as a string.
+  String helloWorld =
+      hello
+          .thenCombine(world, (h, w) -> h + w)
+          .thenCombine(hiCompletableFuture, (prev, curr) -> prev + curr)
+          .thenApply(String::toUpperCase)
+          .join();
+  timeTaken();
+  return helloWorld;
+}
+````
+
+If you closely look at this code, there are multiple failure points as we are dealing with independent service calls and this example can be wrapped in a traditional try-catch block. The code would look something like this. 
+
+````
+public String helloWorldMultipleAsyncCalls() {
+  try {
+    startTimer();
+    CompletableFuture<String> hello =
+        CompletableFuture.supplyAsync(() -> helloWorldService.hello());
+    CompletableFuture<String> world =
+        CompletableFuture.supplyAsync(() -> helloWorldService.world());
+    CompletableFuture<String> hiCompletableFuture =
+        CompletableFuture.supplyAsync(
+            () -> {
+              delay(1000);
+              return " Hi CompletableFuture!";
+            });
+
+    // first argument represents the result of hello.
+    // second argument represents the result of world.
+    // join() will block the main thread and returns the result as a string.
+    String helloWorld =
+        hello
+            .thenCombine(world, (h, w) -> h + w)
+            .thenCombine(hiCompletableFuture, (prev, curr) -> prev + curr)
+            .thenApply(String::toUpperCase)
+            .join();
+    timeTaken();
+    return helloWorld;
+  } catch (Exception e) {
+    log("Exception is: " + e);
+    throw e;
+  }
+}
+````
+
+But in this case, if any of the service calls fail, in that case, the whole transaction will fail and this will throw an exception to the caller. Nothing fancy here and this implementation is pretty straightforward. Is there any other approach in CompletableFuture to handle exceptions in the pipeline? The answer is, YES.
+* CompletableFuture has a functional style of handling exceptions and we can use this in your CompletableFuture pipeline. 
+* These are the 3 options that we have when it comes to handling exceptions using CompletableFuture. 
+  * handle()
+  * exceptionally() 
+  * whenComplete()
+You have 3 different pipeline methods that are available with CompletableFuture in order to handle exceptions but each of these functions work a little different. 
+* These three functional style of handling exceptions can be categorized into two types. The first two options (handle() and exceptionally()) have the capability to catch the exception and recover, which means you can catch the exception and provide a recoverable value instead of just throwing the exceptions in the runtime stack. The third option has the capability to catch the exception, but the key difference is that it doesn't recover from the exception, which means it catches the exception, but still it throws exception to the caller. 
+
+So these are the different options that we have when it comes to handling exceptions in CompletableFuture.
+
+````
+public String helloWorldMultipleAsyncCallsHandle() {
+    startTimer();
+    CompletableFuture<String> hello =
+        CompletableFuture.supplyAsync(() -> helloWorldService.hello());
+    CompletableFuture<String> world =
+        CompletableFuture.supplyAsync(() -> helloWorldService.world());
+    CompletableFuture<String> hiCompletableFuture =
+        CompletableFuture.supplyAsync(
+            () -> {
+              delay(1000);
+              return " Hi CompletableFuture!";
+            });
+
+    // first argument represents the result of hello.
+    // second argument represents the result of world.
+    // join() will block the main thread and returns the result as a string.
+    String helloWorld =
+        hello
+            .handle((res, ex) -> {
+              log("Exception is: " + ex.getMessage());
+              return ""; // recoverable value in case of an exception
+            })
+            .thenCombine(world, (h, w) -> h + w)
+            .thenCombine(hiCompletableFuture, (prev, curr) -> prev + curr)
+            .thenApply(String::toUpperCase)
+            .join();
+    timeTaken();
+    return helloWorld;
+  }
+````
+
+* The handle() method gets called for both negative and positive scenarios and hence it is required to null check for any exception as shown below.
+
+````
+public String helloWorldMultipleAsyncCallsHandlePositiveScenario() {
+  startTimer();
+  CompletableFuture<String> hello =
+      CompletableFuture.supplyAsync(() -> helloWorldService.hello());
+  CompletableFuture<String> world =
+      CompletableFuture.supplyAsync(() -> helloWorldService.world());
+  CompletableFuture<String> hiCompletableFuture =
+      CompletableFuture.supplyAsync(
+          () -> {
+            delay(1000);
+            return " Hi CompletableFuture!";
+          });
+
+  // first argument represents the result of hello.
+  // second argument represents the result of world.
+  // join() will block the main thread and returns the result as a string.
+  String helloWorld =
+      hello
+          .handle((res, ex) -> {
+            log("Result is: " + res);
+            if (ex != null) {
+              log("Exception is: " + ex.getMessage());
+              return ""; // recoverable value in case of an exception
+            } else {
+              return res;
+            }
+          })
+          .thenCombine(world, (h, w) -> h + w)
+          .thenCombine(hiCompletableFuture, (prev, curr) -> prev + curr)
+          .thenApply(String::toUpperCase)
+          .join();
+  timeTaken();
+  return helloWorld;
+}
+````
+
+**Handle/Recover exceptions using "exceptionally()" function**
+* The exceptionally() function takes a function as an input, which means it's going to just take one input and it's going to give you one output. That's not the case with handle() function. the handle() function takes a BiFunction and that's one of the reason why we were able to access both the result and the exception. In the case of exceptionally, it's going to be just the exception. So this is how our exceptionally block will look like. 
+
+````
+public String helloWorldMultipleAsyncCallsExceptionally() {
+  startTimer();
+  CompletableFuture<String> hello =
+      CompletableFuture.supplyAsync(() -> helloWorldService.hello());
+  CompletableFuture<String> world =
+      CompletableFuture.supplyAsync(() -> helloWorldService.world());
+  CompletableFuture<String> hiCompletableFuture =
+      CompletableFuture.supplyAsync(
+        () -> {
+          delay(1000);
+          return " Hi CompletableFuture!";
+        });
+
+  // first argument represents the result of hello.
+  // second argument represents the result of world.
+  // join() will block the main thread and returns the result as a string.
+  String helloWorld =
+      hello
+        .exceptionally(ex -> {
+          log("Exception is: " + ex.getMessage());
+          return ""; // recoverable value in case of an exception
+        })
+        .thenCombine(world, (h, w) -> h + w)
+        .exceptionally(ex -> {
+          log("Exception after world is: " + ex.getMessage());
+          return ""; // recoverable value in case of an exception
+        })
+        .thenCombine(hiCompletableFuture, (prev, curr) -> prev + curr)
+        .thenApply(String::toUpperCase)
+        .join();
+  timeTaken();
+  return helloWorld;
+}
+````
+
+* The exceptionally() is one of the best way of exception handling because you don't have to have the additional logic that we had with handle() function where you need to check the exception for null and then explicitly, handle or provide a recovery for that exception if it's available, if not return the actual value. You don't need to deal with any of those things when it comes to exceptionally(). and the exceptionally() block itself is compact because we are just dealing with exceptions here. The nicest thing about exceptionally() is that it would only get invoked if there is an exception. Otherwise, even though it's part of the pipeline, it will be skipped because there are no exceptions. 
+* In the success path, the key difference is that we just have the Completion Stage Functions not the exceptionally(). In the failure path, we have the exceptionally() functions which is going to be involved when there is an exception. 
+* So any exception that happens in the success path is going to be forwarded to the failure path. In this case, it's the exceptionally() function. So the exceptionally() function is going to receive the exception and then it is going to provide a recoverable value and put the execution of the CompletableFuture back into the success path and continues the execution of the pipeline. This is equivalent to the try-catch way of handling the exceptions because the catch block will come into the picture only when there is an exception. This is almost similar to that but the syntax is compact and it's the functional way of handling the exceptions.
+
+**Handling exceptions using whenComplete() function**
+* This is an exception handler that's part of the CompletableFuture API. 
+* This function catches the exception, but it doesn't have the capability to recover from an exception. In the success path, you have the completion stage functions and on top of it, the whenComplete() function is also part of the success path. This behavior is almost similar to the handle() function. The whenComplete() is also part of the failure part, which is really obvious. 
+* Now, let's say when you have an exception that's happening in the success path and then the exception will be handed over to the whenComplete() function, which is in the failure path, but the key difference is that the whenComplete() exception handler doesn't have the capability to recover from an exception. So in this case, the exception is going to propagate to the next exception handler and there is no way for this exception handler to put this execution back to the success path. So in this case, it's going to throw the exception back to the caller, which means there is no way for this exception handler to recover from that exception. This is one of the least used exception handler in CompletableFuture API.
+
+````
+public String helloWorldMultipleAsyncCallsWhenComplete() {
+  startTimer();
+  CompletableFuture<String> hello =
+      CompletableFuture.supplyAsync(() -> helloWorldService.hello());
+  CompletableFuture<String> world =
+      CompletableFuture.supplyAsync(() -> helloWorldService.world());
+  CompletableFuture<String> hiCompletableFuture =
+      CompletableFuture.supplyAsync(
+          () -> {
+            delay(1000);
+            return " Hi CompletableFuture!";
+          });
+
+  // first argument represents the result of hello.
+  // second argument represents the result of world.
+  // join() will block the main thread and returns the result as a string.
+  String helloWorld =
+      hello
+          .whenComplete((res, ex) -> {
+            if (ex != null) {
+              log("Exception is: " + ex.getMessage());
+            }
+          })
+          .thenCombine(world, (h, w) -> h + w)
+          .whenComplete((res, ex) -> {
+            if (ex != null) {
+              log("Exception after world is: " + ex.getMessage());
+            }
+          })
+          .thenCombine(hiCompletableFuture, (prev, curr) -> prev + curr)
+          .thenApply(String::toUpperCase)
+          .join();
+  timeTaken();
+  return helloWorld;
+}
+````
