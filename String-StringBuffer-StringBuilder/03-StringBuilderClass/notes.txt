@@ -3,7 +3,7 @@ StringBuilder class:
 The problem with StringBuffer is that all the methods present inside it are synchronized. If a method is synchronized then only one thread is allowed to operate on the object. This will cause performance issues and waiting time of threads will increase. Hence in a multithreaded environment we cannot use StringBuffer concept. To overcome this problem Sun introduced StringBuilder.
 --------------------------------------------------------------------------------------------------------
 Differences between StringBuffer and StringBuilder:
-The only difference between a StringBuffer and StringBilder is that all methods inside StringBuilder is not synchronized and hence they can be used in multithreaded applications. Otherwise all methods are one and the same in StringBuilder as well. StringBuilder is the non-synchronized version of StringBuffer.
+The only difference between a StringBuffer and StringBuilder is that all methods inside StringBuilder is not synchronized and hence they can be used in multithreaded applications. Otherwise all methods are one and the same in StringBuilder as well. StringBuilder is the non-synchronized version of StringBuffer.
 
 At a time only one thread is allowed to operate on StringBuffer object and hence it is thread-safe. On the other hand, multiple threads are allowed to operate on StringBuilder object and hence it is not thread-safe.
 
