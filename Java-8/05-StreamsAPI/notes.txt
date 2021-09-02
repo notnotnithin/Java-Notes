@@ -314,7 +314,7 @@ public static Optional<Student> findAnyStudent() {
     // that student and it did not execute any of the student present after it matched the
     // criteria)
     .filter(student -> student.getGpa() >= 3.9)
-    .findAny();
+    .findFirst();
 }
 ````
 
@@ -324,7 +324,7 @@ public static Optional<Student> findAnyStudent() {
 public static Optional<Student> findFirstStudent() {
   return StudentDatabase.getAllStudents().stream()
       .filter(student -> student.getGpa() >= 3.9)
-      .findFirst();
+      .findAny();
 }
 ````
 
