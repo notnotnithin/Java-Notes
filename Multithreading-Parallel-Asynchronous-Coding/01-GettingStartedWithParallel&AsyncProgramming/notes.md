@@ -1,14 +1,13 @@
-The most common requirement in software programming today is that any code that we write needs to execute and perform faster.
+**The most common requirement in software programming today is that any code that we write needs to execute and perform faster. So what are the problems that the parallel and asynchronous programming styles are trying to solve?**
 
-***So what are the problems that the parallel and asynchronous programming styles are trying to solve?***
 In a nutshell, the goal of both of these programming styles is to provide techniques to improve and increase the performance of the code that we write. Parallel and asynchronous programming styles are fundamentally used for totally different types of use cases.
 
-***What's driving these concepts to be part of Java?***
+#### **What's driving these concepts to be part of Java?**
 We have significant technology advancements happening in both hardware and software side.
 
 | Hardware      | Software |
 | ------------- | ------------- |
-| Number one is the advancements to the modern devices that we use day to day, whether it be a mobile device or a computer. All these machines or devices come up with multiple cores.  | Architecture style that we use in software development today. Micro Services architecture is very popular and pretty much most of the enterprises have already migrated to this architecture or in the process of moving to this architecture.  |
+| Number one is the advancements to the modern devices that we use day to day, whether it be a mobile device or a computer. All these machines or devices come up with multiple cores.  | Architecture style that we use in software development today. Microservices architecture is very popular and pretty much most of the enterprises have already migrated to this architecture or in the process of moving to this architecture.  |
 | So as a developer, there is a need to learn programming patterns to maximize the use of multiple cores for faster code execution.  | Most of these interactions are Blocking IO calls, which basically exhibits the synchronous behavior. Any time we make a blocking call, it leads to waste of resources because we are being blocked and waiting for data. This also impacts the latency and performance of the application.  |
 | To bring the technology advancements and the parallel and programming styles together and in order to maximize the use of CPU cores, all we got to do is apply the parallel programming concepts. So as a developer, we have a need to learn about programming patterns that's going to maximize the use of all the available CPU cores.  | To bring the technology advancements and the parallel and programming styles together and in order to maximize the use of CPU cores, all we got to do is apply the parallel programming concepts. So as a developer, we have a need to learn about programming patterns that's going to maximize the use of all the available CPU cores.  |
 | To apply the parallel programming concepts, we will be exploring the Parallel Streams API.  | To apply the parallel programming concepts, we will be exploring the Parallel Streams API.  |
@@ -19,7 +18,7 @@ There are two common themes that comes with these two APIs.
 1. First, both of these programming styles involve threads to improve the performance of the code. 
 2. Second, both of these programming styles or APIs use the functional style of programming.
 
-**Evolution of concurrency and parallelism APIs in JAVA**
+## **Evolution of concurrency and parallelism APIs in JAVA**
 
 Having the knowledge about the evolution will help you to relate why the concurrency APIs in Java continue to evolve with the change in technology and software architectures around it. 
 
@@ -30,10 +29,10 @@ Having the knowledge about the evolution will help you to relate why the concurr
 5. In 2017, Java9 got released. This release had a newer type, which is a Flow API, which enabled a Reactive Programming in Java, which is a pub/sub style of programming. This introduced a complete shift from the way we normally write code. 
 6. The current version of Java that we are using is Java 14.
 
-**Concurrency vs Parallelism:**
+## Concurrency vs Parallelism:
 Developers normally think and understand concurrency and parallelism interchangeably, and some think both are the same.
 
-***Concurrency:***
+#### Concurrency:
 1. Firstly, concurrency is a concept where two or more tasks can run simultaneously in Java. Concurrency is achieved out of the box using Threads. 
 2. The definition of concurrency in itself is vague. What do we mean by that? I said two or more tasks can run simultaneously. Does it mean the tasks are running in interleaved fashion? Are whether the tasks run simultaneously at the same time? It's totally based on the underlying core that you're are trying to run this program. 
 3. If you're running multiple tasks in a single core machine, then it means that the task are  running in an interleaved fashion because there is only one core. CPU has a scheduler that takes care of scheduling these multiple threads to run on the core in an interleaved fashion.
@@ -79,7 +78,7 @@ In this example, threads are interacting with each other via the shared variable
 
 In order to solve these issues, Java have a variety of tools available. Some of the examples are synchronized statements, methods, reentrant locks, semaphores, concurrent collections and conditional objects and more. So the current state of concurrency is about making sure the shared resources are accessed correctly and efficiently. That's all about concurrency.
 
-***Parallelism:***
+#### Parallelism:
 1. Now let's switch gears and talk about parallelism. Parallelism is a concept in which two or more tasks are literally going to run in parallel. This is one of the important difference between concurrency and parallelism.
 
 2. Parallelism involves these following steps. 
@@ -101,7 +100,7 @@ The use case that we have here is to transform the string to uppercase, so we ha
 
 7. The third step is the join phase where we will combine the results step by step to produce the final result. In a nutshell, this is how the parallelism works.
 
-***What happens behind the scenes from the execution standpoint?***
+## What happens behind the scenes from the execution standpoint?
 Here, we have the list split into individual elements. Assume we have multiple cores in the machine, for example, 4 cores. The next step would be to execute the uppercase operation sequentially to produce the result given here. 
 
 From a developer point of view, you might be wondering, how can we fork and join the list that's used in this example?
@@ -122,12 +121,12 @@ public static List<String> getNamesList() {
 
 Here, we have used Streams API in this example. All you got to do to enable Fork/Join operation is you just have to invoke the parallelStream() operation. It takes care of splitting the data structure and run the uppercase operation and perform the join operation. It is as simple as that. This is the beauty of functional programming and all the modern APIs that are introduced in Java recently.
 
-**Summarizing concurrency and parallelism**
+## Summarizing concurrency and parallelism
 Concurrency is a concept where two or more tasks can run simultaneously based on the number of cores that you have in your machine. Concurrency can be implemented in a single or multicore machines. Concurrency is about correctly and efficiently controlling the access to shared resources.
 
 Parallelism is a concept where two or more tasks are literally running simultaneously.Parallelism can only be implemented in multiple code machine. Parallelism is about using more resources to get the answer faster.
 
-**Threads and its limitations**
+## Threads and its limitations
 1. Threads got released as part of Java1, and it's still part of the current version of Java.
 2. Threads are normally used to offload blocking tasks as background tasks. Basically, threads allowed the developers to write asynchronous style of code.
 
@@ -215,7 +214,7 @@ public class ProductServiceUsingThread {
 }
 ```
 
-**Limitations of using low level threads:**
+## Limitations of using low level threads:
 1. The problem with the Runnable implementation is that it is verbose and it is a lot of code. We have written a lot of code in order to achieve this performance and you need to have an instance of a thread and runnable for every asynchronous operation that you have to perform.
 
 2. Also, Runnable interface doesn't take any input and doesn't return any output and for that specific purpose we need to introduce some additional properties or parameters to that particular class.
@@ -224,30 +223,31 @@ public class ProductServiceUsingThread {
 
 4. Threads in general are expensive reason being threads have their own runtime-stack, memory and registers and more. This is primarily the reason why creating and destroying the thread is an expensive process and to solve this problem primarily, the ThreadPool was created.
 
-**Introduction to ThreadPool, ExecutorService and Future:**
+## Introduction to ThreadPool, ExecutorService and Future:
 ThreadPool: You can think of ThreadPool primarily as a group of threads that are created and readily available to handle any work submitted to them. The ThreadPool typically will have a work queue and it pulls a new work from that queue.
 
 There are a couple of things you need to know. If we have any CPU intensive task, basically some complex mathematical calculation or any algorithm related computation, then the number of threads should be equal to the number of cores in your machine. Because at any given time, the number of tasks that can run in parallel is equal to the number of cores.
 
 If you have IO intensive tasks such as a database call or a REST API call, then your ThreadPool size should be greater than the number of cores in your machine. The reason for this is because the thread executing the task will be waiting for the most part. That's one of the reasons why we need to have more threads than the number of cores.
 
-**Benefits of a ThreadPool**:
+## Benefits of a ThreadPool
 With ThreadPool, we don't have to manually create, start or join threads. This is a big win as a developer. This also helps in achieving concurrency for your application. Basically, with four threads, you can have four tasks that can run in parallel. So that's all about ThreadPool, but we cannot do much by having ThreadPool alone because we need tasks in order for these threads to execute.
 
-**ExecutorService**: ExecutorService got released as part of a Java5. If I have to explain about ExecutorService in a single statement, then ExecutorService is an **Asynchronous Task Execution Engine**.
+#### ExecutorService: 
+ExecutorService got released as part of a Java5. If I have to explain about ExecutorService in a single statement, then ExecutorService is an **Asynchronous Task Execution Engine.
 
 This provides a way to asynchronously execute the tasks and provide the result in a much simpler way compared to threads. ExecutorService also enabled coarse-grained task based parallelism in Java.
 
-**Different components of ExecutorService**:
+#### Different components of ExecutorService
 Inside the ExecutorService, we have the
 
-1. ThreadPool
-2. Work Queue - A blocking queue. Any time the client submits a task for the ExecutorService, the task will be placed in the work queue.
-3. Completion Queue - Where the tasks that are completed by the threads in a ThreadPool will be placed in the completion queue.
+1. **ThreadPool**
+2. **Work Queue** - A blocking queue. Any time the client submits a task for the ExecutorService, the task will be placed in the work queue.
+3. **Completion Queue** - Where the tasks that are completed by the threads in a ThreadPool will be placed in the completion queue.
 
 In a nutshell, these are the components that are part of the ExecutorService.
 
-***How does all these components work together to get the work done?***
+## How does all these components work together to get the work done?
 
 When a client (nothing but our code interacting with the ExecutorService) submits a task, it gets placed in the Work Queue. As soon as the work is placed in the work queue, in return you would get a Future. Think of Future as a proxy or a reference to the result that will be available later. Once the task is available in the queue, one of the threads from the ThreadPool is going to take that work and execute the task and place the result in the completion queue and then the client reads the result from it using the Future reference. This is how the ExecutorService, ThreadPool and the Future work together to provide task based parallelism in Java.
 
@@ -296,7 +296,7 @@ public class ProductServiceUsingExecutor {
 
 The primary difference is that we should accept the fact that the above code is much better compared to the thread code because in the thread code, we are directly creating the thread instance and we are directly starting the thread and joining the thread. It requires a lot of code in order to offload the work as an asynchronous task and that's not the case with ExecutorService. So, in a nutshell you just submit the task to an ExecutorService, it takes care of executing the task for you, once the task is complete it saves the completed tasks in a completed queue and using the Future reference we get back the results.
 
-**Limitations of ExecutorService:**
+## Limitations of ExecutorService:
 1. Now, ExecutorService is designed to block the threads. The primary reason for this is we are making the get() call. What does get() call going to do is it is going to block the caller. That's one of the reasons why Future is designed to block. But we do have an option of timeout. In that case, you will be timing out the task, but ultimately you won't be getting that result.
 
 2. The next limitation is that there is no better way to combine the Future. Here we have 2 futures, but the only way to retrieve the result and build the object is making the get() call. Again your code is going to block the caller thread. The second get() call will be blocked until the first get() call is returned. So that's again, another problem.
@@ -305,14 +305,14 @@ But with the recent functional programming advancements in the Java programming 
 
 **HINT**: CompletableFuture is an extension of Future.
 
-**Fork/Join Framework**:
+## Fork/Join Framework:
 Fork Join Framework, is the next new enhancement that's related to the Java Concurrency and Parallelism APIs. 
 
 It's important to have the understanding of Fork/Join Framework because the parallel streams API uses this framework behind the scenes. This got released as part of Java7.
 
 Fork/Join framework extends the ExecutorService. The primary difference between the Fork/Join framework and the ExecutorService is that the Fork/Join framework is designed for a Data Parallelism and the ExecutorService is designed for Task Based Parallelism.
 
-***What does that mean?***
+#### What does that mean?
 If you recall this code, 
 
 ````
@@ -324,7 +324,7 @@ Future<Review> reviewFuture = executorService.submit(() -> reviewService.retriev
 
 The tasks that we are submitting here is the method invocation itself and this whole method gets executed inside the ExecutorService by the thread in the ThreadPool and the output will be returned as part of the future.
 
-***What is a data parallelism?***
+#### What is a data parallelism?
 Data Parallelism is a concept where a given task is recursively split into subtasks to its least possible size and run those tasks in parallel.
 
 Basically, the Fork/Join framework uses that divide and conquer approach in order to improve the overall performance of the code.
@@ -332,7 +332,7 @@ Basically, the Fork/Join framework uses that divide and conquer approach in orde
 How does this Fork/Join framework works? 
 Fork/Join framework has a dedicated pool named Fork/Join pool to support parallelism.
 
-***The internals of a Fork/Join pool***: 
+#### The internals of a Fork/Join pool:
 1. Fork/Join Pool has a Shared Work Queue to which the clients submit the task. The next thing in the Fork/Join pool is the Worker Threads. Let's assume 4 threads T1, T2, T3 and T4 and each thread has a double-ended work queue which is also named as deck in Java.
 2. Client submits a ForkJoinTask to the shared work queue because the Fork/Join pool can only work or accept ForkJoinTask because a ForkJoinTask is different from a regular task as it has the ability to split the task into subtask and join them up for execution.
 3. Now the task is submitted into the shared queue and each and every thread in the double-ended work queue continuously poll the shared work queue for new tasks and the task gets taken by one of the threat that's available in the shared work queue. Assume, T1 thread picks up the task and it gets placed under T1 double-ended work queue.
@@ -342,9 +342,9 @@ Fork/Join framework has a dedicated pool named Fork/Join pool to support paralle
 
 As a whole, this is how the Fork/Join pool works. The underlying working off Fork/Join framework is really complex compared to the ExecutorService but it is good to have this knowledge as a developer.
 
-***ForkJoinTask***:
+## ForkJoinTask:
 
-**What is a ForkJoinTask?**
+#### What is a ForkJoinTask?
 
 A ForkJoinTask represents part of the data and its computation.
 
@@ -352,7 +352,7 @@ In our example, a fine-grained ForkJoinTask would be the individual elements of 
 
 From a developer perspective, we need to write code that's going to perform this splitting operation into individual elements and perform the uppercase operation and join the result. If we want to work with Fork/Join pool, then you can only submit the ForkJoinTask. 
 
-***What are the types of tasks that we can submit?***
+#### What are the types of tasks that we can submit?s
 
 1. **ForkJoinTask:**
    This class is specifically created to work with the Fork/Join pool. In reality, the application normally does not work with ForkJoinTask class. This is mostly used by the Java creators for internal purposes. There are two separate classes which are normally used by the developers to interact with the Fork/Join pool. 
@@ -410,5 +410,5 @@ public class ForkJoinUsingRecursion extends RecursiveTask<List<String>> {
 }
 ````
 
-**Drawbacks of Fork/Join framework**
+#### Drawbacks of Fork/Join framework
 First and foremost, we should agree to the fact that whatever code we have written above is really complex and it is not developer friendly. But this is what we had in Java7 before Streams API was released as part of Java8 for data parallelism.
