@@ -60,8 +60,8 @@ String s = new String("Nithin");
 Here, two objects will be created.
 a. One object will be created in the heap area due to the "new" keyword.
 b. Another object will be created in the String Constant Pool (SCP) for future purpose due to the String literal
-"nithin". An reference will be created explicitly. However, JVM will maintain an implicit reference internally.
-The advantage here is with the reusability for some future purpose. SCP was part of Method Area/PERMGEN till JDK 1.6.
+"nithin". A reference will be created explicitly. However, JVM will maintain an implicit reference internally.
+The advantage here is with the re-usability for some future purpose. SCP was part of Method Area/PERMGEN till JDK 1.6.
 From JDK 1.7 onwards, it is part of heap area for efficient memory utilization.
 
 2. Using String literal
@@ -75,7 +75,7 @@ NOTE:
 2. Due to runtime operations and method calls, if an object need to be created then it will be created in the heap only.
 Whereas, SCP will only hold object created from a String literal.
 3. Any constant operations like 10 + 20, or "a" + "b" will be performed by the compiler and the resulting object will
-be created in the SCP area. If in an expression, there is atleast one variable along with a constant, the operation
+be created in the SCP area. If in an expression, there is at least one variable along with a constant, the operation
 will be performed at runtime. Any runtime object created will be created in the heap area.
 4. Every final variable will be replaced by compiler since final variable are considered constant. So the object will
 be created in SCP.
@@ -135,7 +135,7 @@ the purpose.
 NOTE: To know the number of elements inside an array we use length attribute in Java. However, length() method is
 applicable for Strings.
 
-7. public String replace(char oldChar, char newChar) - replaces every occurence of old characters with the new
+7. public String replace(char oldChar, char newChar) - replaces every occurrence of old characters with the new
 characters.
 
 8. public String substring(int begin) - returns a substring from the begin index to the end of the string.
