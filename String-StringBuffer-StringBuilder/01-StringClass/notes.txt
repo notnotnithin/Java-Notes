@@ -91,7 +91,7 @@ for garbage collection.
 2. NithinSoftware // eligible for garbage collection
 3. s -> NithinSolutions
 --------------------------------------------------------------------------------------------------------
-Important of String Constant Pool:
+Importance of String Constant Pool:
 1. In SCP, same object can be referenced with multiple references.
 2. If multiple references are referencing the same object and one reference is trying to change the object content,
 then all the objects referencing the object will be updated. This will cause the application to behave in an abnormal
