@@ -1,17 +1,22 @@
---------------------------------------------------------------------------------------------------------
 String class:
 1. String objects are immutable and StringBuffer objects are mutable.
 2. What is mutability and immutability? Explain with an example.
 Immutability means when we will not be able to change String object's content upon its creation.
 Mutability means when we will be able to change String object's content upon its creation.
-Ex: 
+
+Ex:
 Here, s is pointing to Nithin. Since String is immutable, we are not allowed to change to the object and
-if we try to change it, with those changes a new object will be created. We cannot make changes to the actual object s. This non-changing behavior is nothing but immutability. As we are not assigning the changes to any object then automatically the new object created will be eligible for garbage collection.
+if we try to change it, with those changes a new object will be created. We cannot make changes to the actual object s.
+
+This non-changing behavior is nothing but immutability. As we are not assigning the changes to any object then
+automatically the new object created will be eligible for garbage collection.
 
 String s = new String("Nithin");
 s.concat('Prasad'); // Nithin
 
-Here, sb is pointing to Nithin. Since StringBuffer is mutable, we are allowed to make changes to the object and if we try to change it, the actual object will be updated without creating a new object. Here, we can make changes to the actual object sb. This changing behavior is nothing but mutability.
+Here, sb is pointing to Nithin. Since StringBuffer is mutable, we are allowed to make changes to the object and if we
+try to change it, the actual object will be updated without creating a new object. Here, we can make changes to the
+actual object sb. This changing behavior is nothing but mutability.
 
 StringBuffer sb = new StringBuffer("Nithin");
 sb.append("Prasad"); // Nithin Prasad
@@ -26,7 +31,8 @@ Ex: Whenever we use the `new` operator, a new object will be created. Both s1 an
 String s1 = new String("Hello");
 String s2 = new String("Hello");
 
-Since both objects are pointing to a different locations, the == operator will return false. The same is true in case of StringBuffer as well.
+Since both objects are pointing to a different locations, the == operator will return false. The same is true in case
+of StringBuffer as well.
 System.out.println(s1 == s2); // false
 
 StringBuffer sb1 = new StringBuffer("Hello");
@@ -35,11 +41,15 @@ System.out.println(sb1 == sb2); // false
 
 2. .equals() method:
 Strictly speaking, .equals() operator is not meant for content comparison. Why?
-Object class has 12 methods (11 public and 1 private) required by every object. Object class also has a .equals() method. Object class's .equals() method is meant for reference/address comparison. This makes it exactly same as == operator.
+Object class has 12 methods (11 public and 1 private) required by every object. Object class also has a .equals()
+method. Object class's .equals() method is meant for reference/address comparison. This makes it exactly same as ==
+operator.
 
 For String class, s1.equals(s2) will return true.
 
-In child classes like String, the .equals() method is overridden for content comparison. However, in StringBuffer class, the .equals() method is not overridden and if we try to use .equals() method, the Object class's .equals() will be called.
+In child classes like String, the .equals() method is overridden for content comparison. However, in StringBuffer class,
+the .equals() method is not overridden and if we try to use .equals() method, the Object class's .equals() will be
+called.
 
 For StringBuffer class, sb1.equals(sb2) will return false.
 --------------------------------------------------------------------------------------------------------
@@ -49,30 +59,43 @@ We can create a string object in two ways:
 String s = new String("Nithin");
 Here, two objects will be created.
 a. One object will be created in the heap area due to the "new" keyword.
-b. Another object will be created in the String Constant Pool (SCP) for future purpose due to the String literal "nithin". An reference will be created explicitly. However, JVM will maintain an implicit reference internally. The advantage here is with the reusability for some future purpose. SCP was part of Method Area/PERMGEN till JDK 1.6. From JDK 1.7 onwards, it is part of heap area for efficient memory utilization.
+b. Another object will be created in the String Constant Pool (SCP) for future purpose due to the String literal
+"nithin". An reference will be created explicitly. However, JVM will maintain an implicit reference internally.
+The advantage here is with the reusability for some future purpose. SCP was part of Method Area/PERMGEN till JDK 1.6.
+From JDK 1.7 onwards, it is part of heap area for efficient memory utilization.
 
 2. Using String literal
 String s = "Nithin";
-Here, only one object will be created in the SCP area. Whenever we create an object with using literal JVM will check if there is any object already existing with the same content as the new object that is going to be created. If so, it will reuse the same object otherwise it will create a new object.
+Here, only one object will be created in the SCP area. Whenever we create an object with using literal JVM will check
+if there is any object already existing with the same content as the new object that is going to be created. If so, it
+will reuse the same object otherwise it will create a new object.
 
 NOTE: 
 1. There is no chance an object can exist in SCP with the same content unlike in heap area.
-2. Due to runtime operations and method calls, if an object need to be created then it will be created in the heap only. Whereas, SCP will only hold object created from a String literal.
-3. Any constant operations like 10 + 20, or "a" + "b" will be performed by the compiler and the resulting object will be created in the SCP area. If in an expression, there is atleast one variable along with a constant, the operation will be performed at runtime. Any runtime object created will be created in the heap area.
-4. Every final variable will be replaced by compiler since final variable are considered constant. So the object will be created in SCP.
+2. Due to runtime operations and method calls, if an object need to be created then it will be created in the heap only.
+Whereas, SCP will only hold object created from a String literal.
+3. Any constant operations like 10 + 20, or "a" + "b" will be performed by the compiler and the resulting object will
+be created in the SCP area. If in an expression, there is atleast one variable along with a constant, the operation
+will be performed at runtime. Any runtime object created will be created in the heap area.
+4. Every final variable will be replaced by compiler since final variable are considered constant. So the object will
+be created in SCP.
+
 Ex:
 String s = new String("Nithin");
 s.concat("Software");
 s = s.concat("Solutions");
 
 HEAP: 
-1. s -> Nithin // After s = s.concat("Solutions"), s will no longer be pointing to Nithin making Nithin eligible for garbage collection.
+1. s -> Nithin // After s = s.concat("Solutions"), s will no longer be pointing to Nithin making Nithin eligible
+for garbage collection.
 2. NithinSoftware // eligible for garbage collection
 3. s -> NithinSolutions
 --------------------------------------------------------------------------------------------------------
 Important of String Constant Pool:
 1. In SCP, same object can be referenced with multiple references.
-2. If multiple references are referencing the same object and one reference is trying to change the object content, then all the objects referencing the object will be updated. This will cause the application to behave in an abnormal way. Hence the concept of immutability came into existence. So because of SCP, there exists immutability in String.
+2. If multiple references are referencing the same object and one reference is trying to change the object content,
+then all the objects referencing the object will be updated. This will cause the application to behave in an abnormal
+way. Hence the concept of immutability came into existence. So because of SCP, there exists immutability in String.
 --------------------------------------------------------------------------------------------------------
 Important constructors of String class:
 1. String s = new String();
@@ -94,29 +117,38 @@ for a given Character array an equivalent String object will be created.
 for a given Byte array an equivalent String object will be created.
 --------------------------------------------------------------------------------------------------------
 Important methods of String class:
-1. public char charAt(int index) - prints the character at the specified index. If the character is not present at the specifed index then we get a runtime exception.
+1. public char charAt(int index) - prints the character at the specified index. If the character is not present at
+the specified index then we get a runtime exception.
 
 2. public String concat(String s) - concatenates the given existing string with another string.
 
-3. public boolean equals(Object o) - responsible for content comparison. Checks the equality of two string objects. This the overridden version of Object class equals() method. By default, equals() method will consider content including case (upper and lower).
+3. public boolean equals(Object o) - responsible for content comparison. Checks the equality of two string objects.
+This the overridden version of Object class equals() method. By default, equals() method will consider content
+including case (upper and lower).
 
-4. public boolean equalsIgnoreCase(String s) - if you want to ignore the case, then equalsIgnoreCase() method serves the purpose.
+4. public boolean equalsIgnoreCase(String s) - if you want to ignore the case, then equalsIgnoreCase() method serves
+the purpose.
 
 5. public boolean isEmpty() - checks if the string is empty or not.
 
 6. public int length() - returns the length of the string.
-NOTE: To know the number of elements inside an array we use length attribute in Java. However, length() method is applicable for Strings.
+NOTE: To know the number of elements inside an array we use length attribute in Java. However, length() method is
+applicable for Strings.
 
-7. public String replace(char oldChar, char newChar) - replaces every occurence of old characters with the new characters.
+7. public String replace(char oldChar, char newChar) - replaces every occurence of old characters with the new
+characters.
 
-8. public String substring(int begin) - returns a substring from the begin index to the end of the string. Index starts from zeroth position.
+8. public String substring(int begin) - returns a substring from the begin index to the end of the string.
+Index starts from zeroth position.
 
 9. public String substring(int begin, int end) - returns a substring from the given begin index to 
 end - 1 (end - start) index string. Index starts from zeroth position.
 
-10. public int indexOf(char c) - returns the index of the specified character. If the specified character is not present then it returns -1. Always returns the index of the first occurence in case of multiple occurences of a character.
+10. public int indexOf(char c) - returns the index of the specified character. If the specified character is not
+present then it returns -1. Always returns the index of the first occurrence in case of multiple occurrences of a
+character.
 
-11. public int lastIndexOf(char c) - returns the index of the last occurence of a given character.
+11. public int lastIndexOf(char c) - returns the index of the last occurrence of a given character.
 
 12. public String toLowerCase() - returns the converted string in lower case. 
 
@@ -125,6 +157,7 @@ end - 1 (end - start) index string. Index starts from zeroth position.
 final vs immutability:
 1. Immutability is related to an object whereas final is related to reference variable.
 2. Just by declaring the StringBuffer object as final, we cannot achieve immutability.
-3. Declaring a StringBuffer variable as final simply means that you cannot reassign the reference variable to any new object.
+3. Declaring a StringBuffer variable as final simply means that you cannot reassign the reference variable
+to any new object.
 4. It is impossible to make StringBuffer immutable.
 --------------------------------------------------------------------------------------------------------
